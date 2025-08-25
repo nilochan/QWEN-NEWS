@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const { getAllNews } = require('./scraper');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,20 +13,56 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// API endpoint for news (to be implemented)
-app.get('/api/news', (req, res) => {
-  // This is a placeholder that will be replaced with actual news aggregation logic
-  res.json({
-    message: 'News API endpoint - to be implemented',
-    sources: [
-      'Singapore News Source 1',
-      'Singapore News Source 2',
-      'Singapore News Source 3',
-      'Malaysia News Source 1',
-      'Malaysia News Source 2',
-      'Malaysia News Source 3'
-    ]
-  });
+// API endpoint for all news
+app.get('/api/news', async (req, res) => {
+  try {
+    const news = await getAllNews();
+    res.json({
+      status: 'success',
+      count: news.length,
+      data: news
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch news',
+      error: error.message
+    });
+  }
+});
+
+// API endpoint for Singapore news only
+app.get('/api/news/singapore', async (req, res) => {
+  try {
+    // Implementation to be added
+    res.json({
+      status: 'success',
+      message: 'Singapore news endpoint - to be implemented'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch Singapore news',
+      error: error.message
+    });
+  }
+});
+
+// API endpoint for Malaysia news only
+app.get('/api/news/malaysia', async (req, res) => {
+  try {
+    // Implementation to be added
+    res.json({
+      status: 'success',
+      message: 'Malaysia news endpoint - to be implemented'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch Malaysia news',
+      error: error.message
+    });
+  }
 });
 
 app.listen(PORT, () => {

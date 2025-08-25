@@ -59,6 +59,19 @@
         button:hover {
             background-color: #005a99;
         }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            padding: 20px;
+        }
+        .timestamp {
+            font-size: 0.7em;
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -68,7 +81,9 @@
     </header>
 
     <div class="category-filter">
-        <button>All News</button>
+        <button id="all-news">All News</button>
+        <button id="singapore-news">Singapore</button>
+        <button id="malaysia-news">Malaysia</button>
         <button>Politics</button>
         <button>Business</button>
         <button>Technology</button>
@@ -76,38 +91,95 @@
         <button>Entertainment</button>
     </div>
 
-    <div class="news-grid">
-        <div class="news-card">
-            <h3>Sample News Title 1</h3>
-            <p>This is a sample news article description. In the final implementation, this will be populated with real news from Singapore and Malaysia sources.</p>
-            <div class="source">Source: Singapore News Portal</div>
-        </div>
-        
-        <div class="news-card">
-            <h3>Sample News Title 2</h3>
-            <p>This is another sample news article. The actual implementation will fetch real news data from multiple sources.</p>
-            <div class="source">Source: Malaysia News Portal</div>
-        </div>
-        
-        <div class="news-card">
-            <h3>Sample News Title 3</h3>
-            <p>Another example of how news will be displayed. Users will be able to click through to the original source.</p>
-            <div class="source">Source: Singapore News Portal</div>
-        </div>
+    <div id="news-container">
+        <div class="loading">Loading news...</div>
     </div>
 
     <script>
-        // This script will be expanded to fetch real news data
         document.addEventListener('DOMContentLoaded', function() {
             console.log('QWEN-NEWS application loaded');
             
-            // Future implementation will fetch news from /api/news endpoint
-            // fetch('/api/news')
-            //   .then(response => response.json())
-            //   .then(data => {
-            //       // Process and display news data
-            //   });
+            // Fetch and display all news
+            fetchAllNews();
+            
+            // Add event listeners to filter buttons
+            document.getElementById('all-news').addEventListener('click', fetchAllNews);
+            document.getElementById('singapore-news').addEventListener('click', fetchSingaporeNews);
+            document.getElementById('malaysia-news').addEventListener('click', fetchMalaysiaNews);
         });
+        
+        async function fetchAllNews() {
+            try {
+                const response = await fetch('/api/news');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                } else {
+                    displayError('Failed to load news');
+                }
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                displayError('Error loading news');
+            }
+        }
+        
+        async function fetchSingaporeNews() {
+            try {
+                const response = await fetch('/api/news/singapore');
+                const data = await response.json();
+                
+                // For now, we'll just show a message
+                document.getElementById('news-container').innerHTML = 
+                    '<div class="loading">Singapore news filtering - to be implemented</div>';
+            } catch (error) {
+                console.error('Error fetching Singapore news:', error);
+                displayError('Error loading Singapore news');
+            }
+        }
+        
+        async function fetchMalaysiaNews() {
+            try {
+                const response = await fetch('/api/news/malaysia');
+                const data = await response.json();
+                
+                // For now, we'll just show a message
+                document.getElementById('news-container').innerHTML = 
+                    '<div class="loading">Malaysia news filtering - to be implemented</div>';
+            } catch (error) {
+                console.error('Error fetching Malaysia news:', error);
+                displayError('Error loading Malaysia news');
+            }
+        }
+        
+        function displayNews(newsData) {
+            const container = document.getElementById('news-container');
+            
+            if (newsData.length === 0) {
+                container.innerHTML = '<div class="loading">No news articles found</div>';
+                return;
+            }
+            
+            let newsHTML = '<div class="news-grid">';
+            
+            newsData.forEach(article => {
+                newsHTML += `
+                    <div class="news-card">
+                        <h3><a href="${article.link}" target="_blank">${article.title}</a></h3>
+                        <div class="source">Source: ${article.source}</div>
+                        <div class="timestamp">Fetched: ${new Date(article.timestamp).toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            
+            newsHTML += '</div>';
+            container.innerHTML = newsHTML;
+        }
+        
+        function displayError(message) {
+            document.getElementById('news-container').innerHTML = 
+                `<div class="error">${message}</div>`;
+        }
     </script>
 </body>
 </html>
