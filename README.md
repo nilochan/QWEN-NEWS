@@ -2,48 +2,25 @@
 
 An interactive website that gathers news from multiple sources in Singapore and Malaysia, allowing users to access news by type/category with future capabilities for interactive features.
 
-## Project Structure
+## ✨ Features
 
-- `CLAUDE.md` - Main project documentation
-- `NEWS/Product Manager.md` - Product requirements and vision
-- `NEWS/Architect.md` - Technical architecture
-- `NEWS/UIUX Engineer.md` - User experience design specifications
-- `NEWS/DEPLOYMENT-GUIDE.md` - Detailed deployment instructions
-- `package.json` - Node.js project configuration
-- `index.js` - Main application server
-- `public/index.html` - Frontend interface
-- `railway.json` - Railway deployment configuration
+- **News Aggregation**: Real-time news from Singapore and Malaysia sources
+- **Beautiful UI**: Modern, responsive design with intuitive navigation
+- **Source Filtering**: Filter news by Singapore or Malaysia sources
+- **Direct Linking**: Click through to original news sources
+- **Mobile Responsive**: Works on all device sizes
 
-## Setup Instructions
+## 🚀 Technologies Used
 
-### GitHub Repository Setup
-1. Clone this repository:
-   ```
-   git clone https://github.com/nilochan/QWEN-NEWS.git
-   cd QWEN-NEWS
-   ```
+- **Backend**: Node.js with Express.js
+- **Web Scraping**: Axios and Cheerio
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Styling**: Modern CSS with Flexbox and Grid
+- **Icons**: Font Awesome
+- **Deployment**: Railway with GitHub Integration
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+## 📁 Project Structure
 
-3. Run the application locally:
-   ```
-   npm start
-   ```
-
-### Railway Deployment
-1. Sign up/in to [Railway](https://railway.app/)
-2. Create a new project
-3. Connect your GitHub account
-4. Select this repository (nilochan/QWEN-NEWS)
-5. Railway will automatically detect the Node.js project and deploy it
-6. The application will be available at the provided URL
-
-## Development
-
-### Project Structure
 ```
 QWEN-NEWS/
 ├── NEWS/
@@ -52,23 +29,77 @@ QWEN-NEWS/
 │   ├── UIUX Engineer.md
 │   └── DEPLOYMENT-GUIDE.md
 ├── public/
-│   └── index.html
-├── CLAUDE.md
-├── README.md
-├── index.js
-├── package.json
-└── railway.json
+│   └── index.html (Frontend UI)
+├── CLAUDE.md (Main documentation)
+├── README.md (This file)
+├── index.js (Server logic)
+├── scraper.js (News scraping logic)
+├── package.json (Dependencies)
+├── package-lock.json (Dependency lock)
+└── railway.json (Railway config)
 ```
 
-### Technologies Used
-- Node.js with Express.js for the backend
-- HTML/CSS for the frontend
-- Railway for deployment
+## 🛠️ Setup Instructions
 
-## Future Features
-- News aggregation from Singapore and Malaysia news portals
-- Live chat functionality
-- User comments on news articles
-- Personalized news feed
-- Social sharing capabilities
-- Advanced filtering and search
+### Local Development
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/nilochan/QWEN-NEWS.git
+   cd QWEN-NEWS
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the application:
+   ```bash
+   npm start
+   ```
+
+4. Visit `http://localhost:3000` in your browser
+
+### Deployment to Railway
+
+1. Connect your GitHub repository to Railway
+2. Railway will automatically deploy on pushes to the main branch
+3. The application will be available at your Railway-provided URL
+
+## 🌐 API Endpoints
+
+- `GET /api/news` - Retrieve all aggregated news
+- `GET /api/news/singapore` - Retrieve Singapore news (coming soon)
+- `GET /api/news/malaysia` - Retrieve Malaysia news (coming soon)
+
+## 🎨 UI/UX Features
+
+- Modern gradient-based design
+- Responsive card layout for news articles
+- Interactive filter buttons with hover effects
+- Loading and error states
+- Country-specific badges for news sources
+- Mobile-friendly navigation
+
+## 📈 Future Enhancements
+
+- [ ] Advanced news filtering by category
+- [ ] Search functionality
+- [ ] User accounts and preferences
+- [ ] Live chat integration
+- [ ] Social sharing features
+- [ ] Bookmarking favorite articles
+- [ ] Push notifications for breaking news
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
