@@ -333,7 +333,6 @@
 
         .card-category {
             display: inline-block;
-            background: var(--accent);
             color: var(--light);
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
@@ -342,6 +341,14 @@
             margin-bottom: 1rem;
             align-self: flex-start;
         }
+
+        /* Category colors */
+        .category-singapore { background: #0ea5e9; }
+        .category-malaysia { background: #8b5cf6; }
+        .category-business { background: #10b981; }
+        .category-technology { background: #f59e0b; }
+        .category-sports { background: #ef4444; }
+        .category-general { background: #64748b; }
 
         .card-title {
             margin-bottom: 1rem;
@@ -490,6 +497,10 @@
             .featured-title {
                 font-size: 1.5rem;
             }
+            
+            .card-image {
+                height: 180px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -507,6 +518,10 @@
 
             .section-title {
                 font-size: 1.5rem;
+            }
+            
+            .card-image {
+                height: 150px;
             }
         }
     </style>
@@ -653,6 +668,12 @@
                 </div>`;
         }
 
+        // Get category class for styling
+        function getCategoryClass(category) {
+            const normalizedCategory = category.toLowerCase();
+            return `category-${normalizedCategory}`;
+        }
+
         // Display news articles
         function displayNews(articles) {
             const container = document.getElementById('news-container');
@@ -672,14 +693,20 @@
             
             let newsHTML = '';
             
-            // Create featured article (first article)
-            if (articles.length > 0) {
+            // Display up to 20 articles (including featured)
+            const displayCount = Math.min(articles.length, 20);
+            
+            // Create featured article (first article) if we have enough articles
+            if (displayCount > 0) {
                 const featured = articles[0];
+                const category = featured.category.charAt(0).toUpperCase() + featured.category.slice(1);
+                const categoryClass = getCategoryClass(featured.category);
+                
                 newsHTML += `
                     <article class="featured-article">
                         <img src="${featured.image}" alt="${featured.title}" class="featured-image" onerror="this.src='https://placehold.co/800x400/c30000/white?text=Featured+News'">
                         <div class="featured-content">
-                            <span class="featured-category">${featured.category.charAt(0).toUpperCase() + featured.category.slice(1)}</span>
+                            <span class="featured-category ${categoryClass}">${category}</span>
                             <h2 class="featured-title">
                                 <a href="${featured.link}" target="_blank">${featured.title}</a>
                             </h2>
@@ -699,15 +726,16 @@
             }
             
             // Create regular articles (remaining articles)
-            for (let i = 1; i < Math.min(articles.length, 13); i++) {
+            for (let i = 1; i < displayCount; i++) {
                 const article = articles[i];
                 const category = article.category.charAt(0).toUpperCase() + article.category.slice(1);
+                const categoryClass = getCategoryClass(article.category);
                 
                 newsHTML += `
                     <article class="news-card">
-                        <img src="${article.image}" alt="${article.title}" class="card-image" onerror="this.src='https://placehold.co/600x400/0066cc/white?text=${category}+News'">
+                        <img src="${article.image}" alt="${article.title}" class="card-image" onerror="this.src='https://placehold.co/600x400/64748b/white?text=${category}+News'">
                         <div class="card-content">
-                            <span class="card-category">${category}</span>
+                            <span class="card-category ${categoryClass}">${category}</span>
                             <h3 class="card-title">
                                 <a href="${article.link}" target="_blank">${article.title}</a>
                             </h3>
@@ -766,6 +794,14 @@
                     case 'business':
                         response = await fetch('/api/news/business');
                         document.getElementById('section-title').textContent = 'Business News';
+                        break;
+                    case 'technology':
+                        response = await fetch('/api/news/technology');
+                        document.getElementById('section-title').textContent = 'Technology News';
+                        break;
+                    case 'sports':
+                        response = await fetch('/api/news/sports');
+                        document.getElementById('section-title').textContent = 'Sports News';
                         break;
                     default:
                         response = await fetch('/api/news');
