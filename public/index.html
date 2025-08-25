@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QWEN-NEWS - Singapore & Malaysia News Aggregator</title>
+    <title>QWEN-NEWS | Singapore & Malaysia News Aggregator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #2563eb;
-            --secondary-color: #0ea5e9;
-            --accent-color: #8b5cf6;
-            --light-color: #f8fafc;
-            --dark-color: #0f172a;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --gray-400: #94a3b8;
-            --gray-500: #64748b;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --primary: #c30000;
+            --secondary: #000000;
+            --accent: #0066cc;
+            --light: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-md: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+            --shadow-lg: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            --transition: all 0.3s cubic-bezier(.25,.8,.25,1);
         }
 
         * {
@@ -31,129 +34,280 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--gray-100) 0%, #e0f2fe 100%);
-            color: var(--dark-color);
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-900);
             line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
 
         /* Header Styles */
         header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 1.5rem 0;
-            box-shadow: var(--shadow-lg);
+            background: var(--light);
+            box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
-        .header-content {
+        .top-bar {
+            background: var(--secondary);
+            color: var(--light);
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .top-bar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+        }
+
+        .date-display {
+            font-weight: 500;
+        }
+
+        .social-links a {
+            color: var(--light);
+            margin-left: 1rem;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: var(--gray-400);
+        }
+
+        .main-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo i {
-            font-size: 2rem;
-        }
-
-        .logo h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1rem;
         }
 
         .logo span {
-            font-weight: 300;
+            color: var(--secondary);
         }
 
         .tagline {
             font-size: 1rem;
-            opacity: 0.9;
-            margin-top: 0.25rem;
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
 
-        /* Filter Styles */
-        .filters {
-            background: white;
-            padding: 1.5rem 0;
-            box-shadow: var(--shadow);
-            margin-bottom: 2rem;
+        /* Search Bar */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 1.5rem;
         }
 
-        .filter-buttons {
+        .search-bar {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
+            border: 2px solid var(--gray-300);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(195, 0, 0, 0.1);
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-button {
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-button:hover {
+            background: #a00000;
+        }
+
+        /* Navigation */
+        nav {
+            width: 100%;
+            background: var(--secondary);
+            margin-top: 1rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
             justify-content: center;
         }
 
-        .filter-btn {
-            background: white;
-            border: 2px solid var(--gray-200);
-            color: var(--dark-color);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: block;
+            color: var(--light);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-            border-color: var(--primary-color);
-        }
-
-        .filter-btn.active, .filter-btn:active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        /* News Grid */
-        .news-container {
-            padding: 1rem 0 3rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-300);
         }
 
         .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--dark-color);
-            font-size: 1.75rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
             font-weight: 700;
+            color: var(--secondary);
         }
 
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* News Grid */
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
         }
 
-        .news-card {
-            background: white;
-            border-radius: 16px;
+        /* Featured Article */
+        .featured-article {
+            grid-column: 1 / -1;
+            background: var(--light);
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-article:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .featured-content {
+            padding: 2rem;
+        }
+
+        .featured-category {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .featured-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .featured-title a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .featured-title a:hover {
+            color: var(--primary);
+        }
+
+        .featured-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .featured-source {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Regular Articles */
+        .news-card {
+            background: var(--light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
             height: 100%;
@@ -168,17 +322,6 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .card-badge {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .card-content {
@@ -188,283 +331,309 @@
             flex-direction: column;
         }
 
+        .card-category {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            align-self: flex-start;
+        }
+
         .card-title {
             margin-bottom: 1rem;
             flex-grow: 1;
         }
 
         .card-title a {
-            color: var(--dark-color);
+            color: var(--secondary);
             text-decoration: none;
             font-size: 1.25rem;
             font-weight: 700;
             line-height: 1.4;
-            transition: color 0.2s ease;
+            transition: color 0.2s;
         }
 
         .card-title a:hover {
-            color: var(--primary-color);
+            color: var(--primary);
         }
 
         .card-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 1rem;
+            margin-top: auto;
             padding-top: 1rem;
             border-top: 1px solid var(--gray-200);
+            color: var(--gray-600);
+            font-size: 0.85rem;
         }
 
-        .source {
+        .card-source {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .timestamp {
-            font-size: 0.85rem;
-            color: var(--gray-500);
         }
 
         /* Status Messages */
         .status-message {
+            grid-column: 1 / -1;
             text-align: center;
             padding: 3rem;
-            background: white;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            margin: 2rem 0;
+            background: var(--light);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
         }
 
         .status-message i {
             font-size: 3rem;
             margin-bottom: 1rem;
+            color: var(--primary);
         }
 
         .loading {
-            color: var(--primary-color);
+            color: var(--primary);
         }
 
         .error {
-            color: var(--danger-color);
+            color: #dc3545;
         }
 
         /* Footer */
         footer {
-            background: var(--dark-color);
-            color: white;
+            background: var(--secondary);
+            color: var(--light);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column ul li a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--light);
+        }
+
+        .copyright {
             text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--gray-800);
+            color: var(--gray-500);
+            font-size: 0.9rem;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .header-content {
+            .top-bar-content {
                 flex-direction: column;
-                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+            }
+
+            .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
             }
 
             .news-grid {
                 grid-template-columns: 1fr;
             }
 
-            .filter-buttons {
-                justify-content: center;
+            .featured-image {
+                height: 250px;
             }
 
-            .filter-btn {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.9rem;
+            .featured-content {
+                padding: 1.5rem;
+            }
+
+            .featured-title {
+                font-size: 1.5rem;
             }
         }
 
         @media (max-width: 480px) {
-            .logo h1 {
+            .main-header {
+                padding: 1rem 0.5rem;
+            }
+
+            .logo {
+                font-size: 1.75rem;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+
+            .section-title {
                 font-size: 1.5rem;
-            }
-
-            .filter-btn {
-                padding: 0.5rem 1rem;
-            }
-
-            .news-grid {
-                gap: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-newspaper"></i>
-                    <div>
-                        <h1>QWEN-<span>NEWS</span></h1>
-                        <div class="tagline">Your gateway to Singapore & Malaysia news</div>
-                    </div>
+        <div class="top-bar">
+            <div class="top-bar-content">
+                <div class="date-display" id="current-date">Loading date...</div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
         </div>
+        
+        <div class="main-header">
+            <div class="logo">QWEN-<span>NEWS</span></div>
+            <div class="tagline">Your trusted source for Singapore & Malaysia news</div>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search for news, topics, or keywords...">
+                    <button class="search-button" id="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-filter="all">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="singapore">Singapore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="malaysia">Malaysia</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="business">Business</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="technology">Technology</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="sports">Sports</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
-    <div class="filters">
-        <div class="container">
-            <div class="filter-buttons">
-                <button id="all-news" class="filter-btn active">
-                    <i class="fas fa-globe-asia"></i> All News
-                </button>
-                <button id="singapore-news" class="filter-btn">
-                    <i class="fas fa-flag"></i> Singapore
-                </button>
-                <button id="malaysia-news" class="filter-btn">
-                    <i class="fas fa-flag"></i> Malaysia
-                </button>
-                <button id="business-news" class="filter-btn">
-                    <i class="fas fa-business-time"></i> Business
-                </button>
-                <button class="filter-btn">
-                    <i class="fas fa-flask"></i> Technology
-                </button>
-                <button class="filter-btn">
-                    <i class="fas fa-futbol"></i> Sports
-                </button>
-                <button class="filter-btn">
-                    <i class="fas fa-music"></i> Entertainment
-                </button>
+    <main class="container">
+        <div class="section-header">
+            <h2 class="section-title" id="section-title">Latest News</h2>
+            <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="news-grid" id="news-container">
+            <div class="status-message loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <h3>Loading latest news...</h3>
+                <p>Please wait while we fetch the most recent articles</p>
             </div>
         </div>
-    </div>
-
-    <div class="container">
-        <div class="news-container">
-            <h2 class="section-title">Latest News</h2>
-            <div id="news-container">
-                <div class="status-message loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <h3>Loading latest news...</h3>
-                    <p>Please wait while we fetch the most recent articles</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 QWEN-NEWS. Aggregating news from Singapore and Malaysia.</p>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>About QWEN-NEWS</h3>
+                    <p>Your trusted source for aggregated news from Singapore and Malaysia. We bring you the latest updates from multiple reputable sources.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#" data-filter="singapore">Singapore News</a></li>
+                        <li><a href="#" data-filter="malaysia">Malaysia News</a></li>
+                        <li><a href="#" data-filter="business">Business</a></li>
+                        <li><a href="#" data-filter="technology">Technology</a></li>
+                        <li><a href="#" data-filter="sports">Sports</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 QWEN-NEWS. All rights reserved. Aggregating news from Singapore and Malaysia.</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('QWEN-NEWS application loaded');
-            
-            // Fetch and display all news
-            fetchAllNews();
-            
-            // Add event listeners to filter buttons
-            document.getElementById('all-news').addEventListener('click', function() {
-                setActiveButton(this);
-                fetchAllNews();
+        // Update current date
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Set active navigation link
+        function setActiveNav(filter) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
             });
             
-            document.getElementById('singapore-news').addEventListener('click', function() {
-                setActiveButton(this);
-                fetchSingaporeNews();
-            });
-            
-            document.getElementById('malaysia-news').addEventListener('click', function() {
-                setActiveButton(this);
-                fetchMalaysiaNews();
-            });
-            
-            document.getElementById('business-news').addEventListener('click', function() {
-                setActiveButton(this);
-                fetchBusinessNews();
-            });
-        });
-        
-        function setActiveButton(activeButton) {
-            // Remove active class from all buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Add active class to clicked button
-            activeButton.classList.add('active');
+            document.querySelector(`.nav-link[data-filter="${filter}"]`).classList.add('active');
         }
-        
-        async function fetchAllNews() {
-            try {
-                showLoading();
-                const response = await fetch('/api/news');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    displayNews(data.data);
-                } else {
-                    displayError('Failed to load news');
-                }
-            } catch (error) {
-                console.error('Error fetching news:', error);
-                displayError('Error loading news. Please try again later.');
-            }
-        }
-        
-        async function fetchSingaporeNews() {
-            try {
-                showLoading();
-                const response = await fetch('/api/news/singapore');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    displayNews(data.data);
-                } else {
-                    displayError('Failed to load Singapore news');
-                }
-            } catch (error) {
-                console.error('Error fetching Singapore news:', error);
-                displayError('Error loading Singapore news. Please try again later.');
-            }
-        }
-        
-        async function fetchMalaysiaNews() {
-            try {
-                showLoading();
-                const response = await fetch('/api/news/malaysia');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    displayNews(data.data);
-                } else {
-                    displayError('Failed to load Malaysia news');
-                }
-            } catch (error) {
-                console.error('Error fetching Malaysia news:', error);
-                displayError('Error loading Malaysia news. Please try again later.');
-            }
-        }
-        
-        async function fetchBusinessNews() {
-            try {
-                showLoading();
-                const response = await fetch('/api/news/business');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    displayNews(data.data);
-                } else {
-                    displayError('Failed to load Business news');
-                }
-            } catch (error) {
-                console.error('Error fetching Business news:', error);
-                displayError('Error loading Business news. Please try again later.');
-            }
-        }
-        
+
+        // Show loading state
         function showLoading() {
             document.getElementById('news-container').innerHTML = 
                 `<div class="status-message loading">
@@ -473,67 +642,9 @@
                     <p>Please wait while we fetch the latest articles</p>
                 </div>`;
         }
-        
-        function displayNews(newsData) {
-            const container = document.getElementById('news-container');
-            
-            if (newsData.length === 0) {
-                container.innerHTML = 
-                    `<div class="status-message">
-                        <i class="fas fa-newspaper"></i>
-                        <h3>No news articles found</h3>
-                        <p>We couldn't find any articles at this time. Please try again later.</p>
-                    </div>`;
-                return;
-            }
-            
-            let newsHTML = '<div class="news-grid">';
-            
-            newsData.forEach(article => {
-                // Determine category for badge
-                let badgeText = 'General';
-                if (article.source.includes('Channel NewsAsia') || 
-                    article.source.includes('Straits Times') || 
-                    article.source.includes('Today')) {
-                    badgeText = 'Singapore';
-                } else if (article.source.includes('Star') || 
-                          article.source.includes('Malay Mail') || 
-                          article.source.includes('NST')) {
-                    badgeText = 'Malaysia';
-                } else if (article.source.includes('CNBC') || 
-                          article.source.includes('Bloomberg')) {
-                    badgeText = 'Business';
-                }
-                
-                // Use article image or default placeholder
-                const imageUrl = article.image || 'https://placehold.co/600x400/2563eb/white?text=News+Image';
-                
-                newsHTML += `
-                    <div class="news-card">
-                        <img src="${imageUrl}" alt="${article.title}" class="card-image" onerror="this.src='https://placehold.co/600x400/2563eb/white?text=News+Image'">
-                        <div class="card-badge">${badgeText}</div>
-                        <div class="card-content">
-                            <div class="card-title">
-                                <a href="${article.link}" target="_blank">${article.title}</a>
-                            </div>
-                            <div class="card-meta">
-                                <div class="source">
-                                    <i class="fas fa-link"></i> ${article.source}
-                                </div>
-                                <div class="timestamp">
-                                    <i class="far fa-clock"></i> ${new Date(article.timestamp).toLocaleDateString()}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            newsHTML += '</div>';
-            container.innerHTML = newsHTML;
-        }
-        
-        function displayError(message) {
+
+        // Show error state
+        function showError(message) {
             document.getElementById('news-container').innerHTML = 
                 `<div class="status-message error">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -541,6 +652,215 @@
                     <p>${message}</p>
                 </div>`;
         }
+
+        // Display news articles
+        function displayNews(articles) {
+            const container = document.getElementById('news-container');
+            
+            if (!articles || articles.length === 0) {
+                container.innerHTML = 
+                    `<div class="status-message">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No news articles found</h3>
+                        <p>We couldn't find any articles matching your criteria. Please try again later.</p>
+                    </div>`;
+                return;
+            }
+            
+            // Sort articles by date (newest first)
+            articles.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            let newsHTML = '';
+            
+            // Create featured article (first article)
+            if (articles.length > 0) {
+                const featured = articles[0];
+                newsHTML += `
+                    <article class="featured-article">
+                        <img src="${featured.image}" alt="${featured.title}" class="featured-image" onerror="this.src='https://placehold.co/800x400/c30000/white?text=Featured+News'">
+                        <div class="featured-content">
+                            <span class="featured-category">${featured.category.charAt(0).toUpperCase() + featured.category.slice(1)}</span>
+                            <h2 class="featured-title">
+                                <a href="${featured.link}" target="_blank">${featured.title}</a>
+                            </h2>
+                            <div class="featured-meta">
+                                <div class="featured-source">
+                                    <i class="fas fa-newspaper"></i>
+                                    <span>${featured.source}</span>
+                                </div>
+                                <div class="featured-date">
+                                    <i class="far fa-clock"></i>
+                                    <span>${featured.displayDate || new Date(featured.timestamp).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+            
+            // Create regular articles (remaining articles)
+            for (let i = 1; i < Math.min(articles.length, 13); i++) {
+                const article = articles[i];
+                const category = article.category.charAt(0).toUpperCase() + article.category.slice(1);
+                
+                newsHTML += `
+                    <article class="news-card">
+                        <img src="${article.image}" alt="${article.title}" class="card-image" onerror="this.src='https://placehold.co/600x400/0066cc/white?text=${category}+News'">
+                        <div class="card-content">
+                            <span class="card-category">${category}</span>
+                            <h3 class="card-title">
+                                <a href="${article.link}" target="_blank">${article.title}</a>
+                            </h3>
+                            <div class="card-meta">
+                                <div class="card-source">
+                                    <i class="fas fa-newspaper"></i>
+                                    <span>${article.source}</span>
+                                </div>
+                                <div class="card-date">
+                                    <i class="far fa-clock"></i>
+                                    <span>${article.displayDate || new Date(article.timestamp).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+            
+            container.innerHTML = newsHTML;
+        }
+
+        // Fetch all news
+        async function fetchAllNews() {
+            try {
+                showLoading();
+                const response = await fetch('/api/news');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                    document.getElementById('section-title').textContent = 'Latest News';
+                } else {
+                    showError('Failed to load news');
+                }
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                showError('Error loading news. Please try again later.');
+            }
+        }
+
+        // Fetch filtered news
+        async function fetchFilteredNews(filter) {
+            try {
+                showLoading();
+                let response, data;
+                
+                switch(filter) {
+                    case 'singapore':
+                        response = await fetch('/api/news/singapore');
+                        document.getElementById('section-title').textContent = 'Singapore News';
+                        break;
+                    case 'malaysia':
+                        response = await fetch('/api/news/malaysia');
+                        document.getElementById('section-title').textContent = 'Malaysia News';
+                        break;
+                    case 'business':
+                        response = await fetch('/api/news/business');
+                        document.getElementById('section-title').textContent = 'Business News';
+                        break;
+                    default:
+                        response = await fetch('/api/news');
+                        document.getElementById('section-title').textContent = 'Latest News';
+                }
+                
+                data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                } else {
+                    showError(`Failed to load ${filter} news`);
+                }
+            } catch (error) {
+                console.error(`Error fetching ${filter} news:`, error);
+                showError(`Error loading ${filter} news. Please try again later.`);
+            }
+        }
+
+        // Search news
+        async function searchNews(query) {
+            try {
+                showLoading();
+                const response = await fetch(`/api/news/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                    document.getElementById('section-title').textContent = `Search Results for "${query}"`;
+                } else {
+                    showError('Failed to search news');
+                }
+            } catch (error) {
+                console.error('Error searching news:', error);
+                showError('Error searching news. Please try again later.');
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('QWEN-NEWS application loaded');
+            updateCurrentDate();
+            fetchAllNews();
+            
+            // Add event listeners to navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const filter = this.getAttribute('data-filter');
+                    setActiveNav(filter);
+                    
+                    if (filter === 'all') {
+                        fetchAllNews();
+                    } else {
+                        fetchFilteredNews(filter);
+                    }
+                });
+            });
+            
+            // Add event listeners to footer category links
+            document.querySelectorAll('.footer-column ul li a[data-filter]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // Update navigation
+                    setActiveNav(filter);
+                    
+                    // Update main content
+                    if (filter === 'all') {
+                        fetchAllNews();
+                    } else {
+                        fetchFilteredNews(filter);
+                    }
+                });
+            });
+            
+            // Add event listener to search button
+            document.getElementById('search-button').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value.trim();
+                if (query) {
+                    searchNews(query);
+                }
+            });
+            
+            // Add event listener to search input for Enter key
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const query = this.value.trim();
+                    if (query) {
+                        searchNews(query);
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>

@@ -1,25 +1,29 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// News sources with selectors for titles, links, and images
+// News sources with selectors for titles, links, images, and dates
 const NEWS_SOURCES = {
   singapore: [
     {
       name: 'Channel NewsAsia',
       url: 'https://www.channelnewsasia.com',
       selectors: {
-        title: 'h1 a',
-        link: 'h1 a',
-        image: 'img'
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a',
+        link: 'h1 a, h2 a, h3 a',
+        image: 'img',
+        date: '.date, time, .timestamp'
       }
     },
     {
       name: 'The Straits Times',
       url: 'https://www.straitstimes.com',
       selectors: {
+        container: 'article, .card, .story',
         title: 'h1 a, h2 a, h3 a',
         link: 'h1 a, h2 a, h3 a',
-        image: 'img'
+        image: 'img',
+        date: '.date, time, .timestamp'
       }
     }
   ],
@@ -28,18 +32,22 @@ const NEWS_SOURCES = {
       name: 'The Star',
       url: 'https://www.thestar.com.my',
       selectors: {
+        container: 'article, .card, .story',
         title: 'h2 a, h3 a',
         link: 'h2 a, h3 a',
-        image: 'img'
+        image: 'img',
+        date: '.date, time, .timestamp'
       }
     },
     {
       name: 'Malay Mail',
       url: 'https://www.malaymail.com',
       selectors: {
+        container: 'article, .card, .story',
         title: 'h2 a, h3 a',
         link: 'h2 a, h3 a',
-        image: 'img'
+        image: 'img',
+        date: '.date, time, .timestamp'
       }
     }
   ],
@@ -48,52 +56,101 @@ const NEWS_SOURCES = {
       name: 'CNBC',
       url: 'https://www.cnbc.com',
       selectors: {
+        container: 'article, .card, .story',
         title: 'h2 a, h3 a',
         link: 'h2 a, h3 a',
-        image: 'img'
+        image: 'img',
+        date: '.date, time, .timestamp'
       }
     },
     {
       name: 'Bloomberg',
       url: 'https://www.bloomberg.com',
       selectors: {
+        container: 'article, .card, .story',
         title: 'h1 a, h2 a, h3 a',
         link: 'h1 a, h2 a, h3 a',
-        image: 'img'
+        image: 'img',
+        date: '.date, time, .timestamp'
       }
     }
   ]
 };
+
+// Function to extract and parse date from element
+function extractDate($, element, source) {
+  try {
+    // Look for date elements within the article container
+    const dateElement = $(element).find(source.selectors.date).first();
+    if (dateElement.length > 0) {
+      const dateText = dateElement.text().trim() || dateElement.attr('datetime');
+      if (dateText) {
+        // Try to parse the date
+        const parsedDate = new Date(dateText);
+        if (!isNaN(parsedDate.getTime())) {
+          return parsedDate;
+        }
+      }
+    }
+    
+    // If no date found, try to find it in the article metadata
+    const timeElement = $(element).find('time').first();
+    if (timeElement.length > 0) {
+      const dateTime = timeElement.attr('datetime') || timeElement.text().trim();
+      if (dateTime) {
+        const parsedDate = new Date(dateTime);
+        if (!isNaN(parsedDate.getTime())) {
+          return parsedDate;
+        }
+      }
+    }
+    
+    // If still no date, return current date
+    return new Date();
+  } catch (error) {
+    // If any error occurs, return current date
+    return new Date();
+  }
+}
 
 // Function to scrape news from a source
 async function scrapeNewsSource(source, category = 'general') {
   try {
     const response = await axios.get(source.url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      }
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+      },
+      timeout: 10000 // 10 second timeout
     });
     
     const $ = cheerio.load(response.data);
     const articles = [];
     
-    // Extract articles based on selectors
-    const titleElements = $(source.selectors.title);
+    // Find all article containers
+    const containers = $(source.selectors.container);
     
-    titleElements.each((index, element) => {
-      if (index >= 10) return; // Limit to 10 articles per source
+    containers.each((index, element) => {
+      if (index >= 15) return; // Limit to 15 articles per source
       
-      const title = $(element).text().trim();
-      let link = $(element).attr('href');
+      // Find title and link within the container
+      const titleElement = $(element).find(source.selectors.title).first();
+      const title = titleElement.text().trim();
+      let link = titleElement.attr('href');
+      
+      // Skip if no title or link
+      if (!title || !link) return;
       
       // Handle relative links
       if (link && !link.startsWith('http')) {
         link = link.startsWith('/') ? `${source.url}${link}` : `${source.url}/${link}`;
       }
       
+      // Extract date
+      const timestamp = extractDate($, element, source);
+      
       // Try to find an image for the article
       let image = null;
-      const imageElement = $(element).closest('article, .card, .story, .item').find('img').first();
+      const imageElement = $(element).find('img').first();
       if (imageElement.length > 0) {
         image = imageElement.attr('src') || imageElement.attr('data-src');
         // Handle relative image URLs
@@ -107,16 +164,23 @@ async function scrapeNewsSource(source, category = 'general') {
         image = getDefaultImage(category);
       }
       
-      if (title && link) {
-        articles.push({
-          title,
-          link,
-          source: source.name,
-          image,
-          category,
-          timestamp: new Date()
-        });
-      }
+      // Create a unique ID for the article
+      const articleId = `${source.name}-${title.substring(0, 50)}-${timestamp.getTime()}`.replace(/[^a-zA-Z0-9-]/g, '-');
+      
+      articles.push({
+        id: articleId,
+        title,
+        link,
+        source: source.name,
+        image,
+        category,
+        timestamp: timestamp.toISOString(),
+        displayDate: timestamp.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        })
+      });
     });
     
     return articles;
@@ -143,6 +207,7 @@ function getDefaultImage(category) {
 
 // Function to get all news from all sources
 async function getAllNews() {
+  const startTime = Date.now();
   const allNews = [];
   
   // Scrape Singapore news
@@ -162,6 +227,9 @@ async function getAllNews() {
     const articles = await scrapeNewsSource(source, 'business');
     allNews.push(...articles);
   }
+  
+  const endTime = Date.now();
+  console.log(`Scraped ${allNews.length} articles in ${endTime - startTime}ms`);
   
   return allNews;
 }
@@ -202,10 +270,22 @@ async function getBusinessNews() {
   return businessNews;
 }
 
+// Function to search news by keyword
+async function searchNews(keyword) {
+  const allNews = await getAllNews();
+  const searchTerm = keyword.toLowerCase();
+  
+  return allNews.filter(article => 
+    article.title.toLowerCase().includes(searchTerm) ||
+    article.source.toLowerCase().includes(searchTerm)
+  );
+}
+
 module.exports = {
   getAllNews,
   getSingaporeNews,
   getMalaysiaNews,
   getBusinessNews,
+  searchNews,
   NEWS_SOURCES
 };
