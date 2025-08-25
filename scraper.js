@@ -313,10 +313,10 @@ async function scrapeNewsSource(source, category = 'general') {
       let title = '';
       
       for (const selector of titleSelectors) {
-        const element = $(element).find(selector).first();
-        if (element.length > 0 && element.text().trim()) {
-          titleElement = element;
-          title = element.text().trim();
+        const foundElement = $(element).find(selector).first();
+        if (foundElement.length > 0 && foundElement.text().trim()) {
+          titleElement = foundElement;
+          title = foundElement.text().trim();
           break;
         }
       }
