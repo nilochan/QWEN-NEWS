@@ -1,0 +1,32 @@
+{
+  "name": "qwen-news",
+  "description": "News aggregation platform for Singapore and Malaysia news",
+  "keywords": [
+    "news",
+    "aggregator",
+    "singapore",
+    "malaysia"
+  ],
+  "website": "https://github.com/nilochan/QWEN-NEWS",
+  "repository": "https://github.com/nilochan/QWEN-NEWS",
+  "logo": "https://example.com/logo.png",
+  "success_url": "/",
+  "env": {
+    "PORT": {
+      "description": "Port for the application",
+      "value": "3000",
+      "required": true
+    }
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}

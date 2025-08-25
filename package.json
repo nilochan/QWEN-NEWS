@@ -1,0 +1,16 @@
+{
+  "name": "qwen-news",
+  "version": "1.0.0",
+  "description": "News aggregation platform for Singapore and Malaysia news",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

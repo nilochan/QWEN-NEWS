@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QWEN-NEWS - Singapore & Malaysia News Aggregator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #007acc;
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .news-card {
+            background: white;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .news-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .news-card p {
+            color: #666;
+        }
+        .source {
+            font-size: 0.8em;
+            color: #007acc;
+            font-weight: bold;
+        }
+        .category-filter {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005a99;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>QWEN-NEWS</h1>
+        <p>Latest news from Singapore and Malaysia</p>
+    </header>
+
+    <div class="category-filter">
+        <button>All News</button>
+        <button>Politics</button>
+        <button>Business</button>
+        <button>Technology</button>
+        <button>Sports</button>
+        <button>Entertainment</button>
+    </div>
+
+    <div class="news-grid">
+        <div class="news-card">
+            <h3>Sample News Title 1</h3>
+            <p>This is a sample news article description. In the final implementation, this will be populated with real news from Singapore and Malaysia sources.</p>
+            <div class="source">Source: Singapore News Portal</div>
+        </div>
+        
+        <div class="news-card">
+            <h3>Sample News Title 2</h3>
+            <p>This is another sample news article. The actual implementation will fetch real news data from multiple sources.</p>
+            <div class="source">Source: Malaysia News Portal</div>
+        </div>
+        
+        <div class="news-card">
+            <h3>Sample News Title 3</h3>
+            <p>Another example of how news will be displayed. Users will be able to click through to the original source.</p>
+            <div class="source">Source: Singapore News Portal</div>
+        </div>
+    </div>
+
+    <script>
+        // This script will be expanded to fetch real news data
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('QWEN-NEWS application loaded');
+            
+            // Future implementation will fetch news from /api/news endpoint
+            // fetch('/api/news')
+            //   .then(response => response.json())
+            //   .then(data => {
+            //       // Process and display news data
+            //   });
+        });
+    </script>
+</body>
+</html>
