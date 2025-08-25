@@ -6,7 +6,8 @@ An interactive website that gathers news from multiple sources in Singapore and 
 
 - **News Aggregation**: Real-time news from Singapore and Malaysia sources
 - **Beautiful UI**: Modern, responsive design with intuitive navigation
-- **Source Filtering**: Filter news by Singapore or Malaysia sources
+- **Source Filtering**: Filter news by Singapore, Malaysia, or Business sources
+- **Image Support**: Visual thumbnails for each news article
 - **Direct Linking**: Click through to original news sources
 - **Mobile Responsive**: Works on all device sizes
 
@@ -70,21 +71,32 @@ QWEN-NEWS/
 ## 🌐 API Endpoints
 
 - `GET /api/news` - Retrieve all aggregated news
-- `GET /api/news/singapore` - Retrieve Singapore news (coming soon)
-- `GET /api/news/malaysia` - Retrieve Malaysia news (coming soon)
+- `GET /api/news/singapore` - Retrieve Singapore news
+- `GET /api/news/malaysia` - Retrieve Malaysia news
+- `GET /api/news/business` - Retrieve Business news
 
 ## 🎨 UI/UX Features
 
 - Modern gradient-based design
-- Responsive card layout for news articles
+- Responsive card layout with images for news articles
 - Interactive filter buttons with hover effects
 - Loading and error states
-- Country-specific badges for news sources
+- Category-specific badges for news sources
 - Mobile-friendly navigation
+
+## 📈 Current Features
+
+- [x] News aggregation from Singapore sources
+- [x] News aggregation from Malaysia sources
+- [x] Business news aggregation
+- [x] Image thumbnails for articles
+- [x] Category filtering (Singapore, Malaysia, Business)
+- [x] Responsive design
+- [x] Direct linking to original sources
 
 ## 📈 Future Enhancements
 
-- [ ] Advanced news filtering by category
+- [ ] Advanced news filtering by additional categories
 - [ ] Search functionality
 - [ ] User accounts and preferences
 - [ ] Live chat integration
