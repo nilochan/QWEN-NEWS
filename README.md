@@ -74,6 +74,7 @@ QWEN-NEWS/
 - `GET /api/news/singapore` - Retrieve Singapore news
 - `GET /api/news/malaysia` - Retrieve Malaysia news
 - `GET /api/news/business` - Retrieve Business news
+- `GET /api/health` - Health check endpoint
 
 ## 🎨 UI/UX Features
 
@@ -93,6 +94,7 @@ QWEN-NEWS/
 - [x] Category filtering (Singapore, Malaysia, Business)
 - [x] Responsive design
 - [x] Direct linking to original sources
+- [x] Health check monitoring
 
 ## 📈 Future Enhancements
 
