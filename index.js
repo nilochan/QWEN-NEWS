@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { getAllNews } = require('./scraper');
+const { getAllNews, getSingaporeNews, getMalaysiaNews, getBusinessNews } = require('./scraper');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,10 +34,11 @@ app.get('/api/news', async (req, res) => {
 // API endpoint for Singapore news only
 app.get('/api/news/singapore', async (req, res) => {
   try {
-    // Implementation to be added
+    const news = await getSingaporeNews();
     res.json({
       status: 'success',
-      message: 'Singapore news endpoint - to be implemented'
+      count: news.length,
+      data: news
     });
   } catch (error) {
     res.status(500).json({
@@ -51,15 +52,34 @@ app.get('/api/news/singapore', async (req, res) => {
 // API endpoint for Malaysia news only
 app.get('/api/news/malaysia', async (req, res) => {
   try {
-    // Implementation to be added
+    const news = await getMalaysiaNews();
     res.json({
       status: 'success',
-      message: 'Malaysia news endpoint - to be implemented'
+      count: news.length,
+      data: news
     });
   } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Failed to fetch Malaysia news',
+      error: error.message
+    });
+  }
+});
+
+// API endpoint for Business news only
+app.get('/api/news/business', async (req, res) => {
+  try {
+    const news = await getBusinessNews();
+    res.json({
+      status: 'success',
+      count: news.length,
+      data: news
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch Business news',
       error: error.message
     });
   }

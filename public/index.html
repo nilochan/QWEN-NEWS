@@ -164,6 +164,13 @@
             box-shadow: var(--shadow-lg);
         }
 
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
         .card-badge {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
@@ -316,7 +323,7 @@
                 <button id="malaysia-news" class="filter-btn">
                     <i class="fas fa-flag"></i> Malaysia
                 </button>
-                <button class="filter-btn">
+                <button id="business-news" class="filter-btn">
                     <i class="fas fa-business-time"></i> Business
                 </button>
                 <button class="filter-btn">
@@ -373,6 +380,11 @@
                 setActiveButton(this);
                 fetchMalaysiaNews();
             });
+            
+            document.getElementById('business-news').addEventListener('click', function() {
+                setActiveButton(this);
+                fetchBusinessNews();
+            });
         });
         
         function setActiveButton(activeButton) {
@@ -387,6 +399,7 @@
         
         async function fetchAllNews() {
             try {
+                showLoading();
                 const response = await fetch('/api/news');
                 const data = await response.json();
                 
@@ -403,16 +416,15 @@
         
         async function fetchSingaporeNews() {
             try {
+                showLoading();
                 const response = await fetch('/api/news/singapore');
                 const data = await response.json();
                 
-                // For now, we'll just show a message
-                document.getElementById('news-container').innerHTML = 
-                    `<div class="status-message loading">
-                        <i class="fas fa-cogs"></i>
-                        <h3>Singapore news filtering coming soon</h3>
-                        <p>This feature is being implemented. Please check back later.</p>
-                    </div>`;
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                } else {
+                    displayError('Failed to load Singapore news');
+                }
             } catch (error) {
                 console.error('Error fetching Singapore news:', error);
                 displayError('Error loading Singapore news. Please try again later.');
@@ -421,20 +433,45 @@
         
         async function fetchMalaysiaNews() {
             try {
+                showLoading();
                 const response = await fetch('/api/news/malaysia');
                 const data = await response.json();
                 
-                // For now, we'll just show a message
-                document.getElementById('news-container').innerHTML = 
-                    `<div class="status-message loading">
-                        <i class="fas fa-cogs"></i>
-                        <h3>Malaysia news filtering coming soon</h3>
-                        <p>This feature is being implemented. Please check back later.</p>
-                    </div>`;
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                } else {
+                    displayError('Failed to load Malaysia news');
+                }
             } catch (error) {
                 console.error('Error fetching Malaysia news:', error);
                 displayError('Error loading Malaysia news. Please try again later.');
             }
+        }
+        
+        async function fetchBusinessNews() {
+            try {
+                showLoading();
+                const response = await fetch('/api/news/business');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                } else {
+                    displayError('Failed to load Business news');
+                }
+            } catch (error) {
+                console.error('Error fetching Business news:', error);
+                displayError('Error loading Business news. Please try again later.');
+            }
+        }
+        
+        function showLoading() {
+            document.getElementById('news-container').innerHTML = 
+                `<div class="status-message loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Loading news...</h3>
+                    <p>Please wait while we fetch the latest articles</p>
+                </div>`;
         }
         
         function displayNews(newsData) {
@@ -453,19 +490,27 @@
             let newsHTML = '<div class="news-grid">';
             
             newsData.forEach(article => {
-                // Determine if it's Singapore or Malaysia news for badge
-                const isSingapore = article.source.includes('Channel NewsAsia') || 
-                                   article.source.includes('Straits Times') || 
-                                   article.source.includes('Today');
-                const isMalaysia = article.source.includes('Star') || 
-                                  article.source.includes('Malay Mail') || 
-                                  article.source.includes('NST');
+                // Determine category for badge
+                let badgeText = 'General';
+                if (article.source.includes('Channel NewsAsia') || 
+                    article.source.includes('Straits Times') || 
+                    article.source.includes('Today')) {
+                    badgeText = 'Singapore';
+                } else if (article.source.includes('Star') || 
+                          article.source.includes('Malay Mail') || 
+                          article.source.includes('NST')) {
+                    badgeText = 'Malaysia';
+                } else if (article.source.includes('CNBC') || 
+                          article.source.includes('Bloomberg')) {
+                    badgeText = 'Business';
+                }
                 
-                const badgeText = isSingapore ? 'Singapore' : isMalaysia ? 'Malaysia' : 'General';
-                const badgeClass = isSingapore ? 'singapore' : isMalaysia ? 'malaysia' : 'general';
+                // Use article image or default placeholder
+                const imageUrl = article.image || 'https://placehold.co/600x400/2563eb/white?text=News+Image';
                 
                 newsHTML += `
                     <div class="news-card">
+                        <img src="${imageUrl}" alt="${article.title}" class="card-image" onerror="this.src='https://placehold.co/600x400/2563eb/white?text=News+Image'">
                         <div class="card-badge">${badgeText}</div>
                         <div class="card-content">
                             <div class="card-title">
