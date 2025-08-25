@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
 
-// Enhanced news sources with better selectors and more sources
+// Enhanced news sources with better selectors and more sources including Chinese newspapers
 const NEWS_SOURCES = {
   singapore: [
     {
@@ -47,6 +47,28 @@ const NEWS_SOURCES = {
         title: 'h1 a, h2 a, h3 a, .post-title',
         link: 'h1 a, h2 a, h3 a, .post-title a',
         image: 'img, .post-image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Lianhe Zaobao',
+      url: 'https://www.zaobao.com.sg',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a, .headline',
+        link: 'h1 a, h2 a, h3 a, .headline a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Shin Min Daily',
+      url: 'https://www.shinmin.sg',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a, .headline',
+        link: 'h1 a, h2 a, h3 a, .headline a',
+        image: 'img, .image',
         date: '.date, time, .timestamp'
       }
     }
@@ -93,6 +115,50 @@ const NEWS_SOURCES = {
         title: 'h2 a, h3 a, .post-title',
         link: 'h2 a, h3 a, .post-title a',
         image: 'img, .post-image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Sin Chew Daily',
+      url: 'https://www.sinchew.com.my',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a, .headline',
+        link: 'h1 a, h2 a, h3 a, .headline a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'China Press',
+      url: 'https://www.chinapress.com.my',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a, .headline',
+        link: 'h1 a, h2 a, h3 a, .headline a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Guang Ming Daily',
+      url: 'https://www.guangming.com.my',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a, .headline',
+        link: 'h1 a, h2 a, h3 a, .headline a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Nanyang Siang Pau',
+      url: 'https://www.nanyang.com.my',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a, .headline',
+        link: 'h1 a, h2 a, h3 a, .headline a',
+        image: 'img, .image',
         date: '.date, time, .timestamp'
       }
     }
@@ -292,19 +358,20 @@ async function scrapeNewsSource(source, category = 'general') {
     for (const selector of containerSelectors) {
       const found = $(selector);
       if (found.length > 0) {
-        containers = found;
-        break;
+        containers = containers.concat(found.toArray());
+        console.log(`Found ${found.length} containers with selector: ${selector}`);
       }
     }
     
     // If still no containers found, try broader selectors
     if (containers.length === 0) {
-      containers = $('article, .card, .story, .post, .item');
+      containers = $('article, .card, .story, .post, .item').toArray();
+      console.log(`Found ${containers.length} containers with broad selectors`);
     }
     
-    console.log(`Found ${containers.length} containers for ${source.name}`);
+    console.log(`Processing ${containers.length} containers for ${source.name}`);
     
-    containers.each((index, element) => {
+    containers.forEach((element, index) => {
       if (index >= 25) return; // Increase limit to 25 articles per source
       
       // Try multiple title selectors
