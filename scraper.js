@@ -10,10 +10,10 @@ const NEWS_SOURCES = {
       name: 'Channel NewsAsia',
       url: 'https://www.channelnewsasia.com',
       selectors: {
-        container: 'article, .media-object, .card',
-        title: 'h1 a, h2 a, h3 a, .teaser__title a',
-        link: 'h1 a, h2 a, h3 a, .teaser__title a',
-        image: 'img, .media-object__image',
+        container: 'article, .media-object, .card, .teaser',
+        title: 'h1 a, h2 a, h3 a, .teaser__title a, .teaser__headline a',
+        link: 'h1 a, h2 a, h3 a, .teaser__title a, .teaser__headline a',
+        image: 'img, .media-object__image, .teaser__image',
         date: '.date, time, .timestamp, .teaser__timestamp'
       }
     },
@@ -21,21 +21,21 @@ const NEWS_SOURCES = {
       name: 'The Straits Times',
       url: 'https://www.straitstimes.com',
       selectors: {
-        container: 'article, .card, .story-card, .block-preview',
-        title: 'h1 a, h2 a, h3 a, .headline',
-        link: 'h1 a, h2 a, h3 a, .headline-link',
-        image: 'img, .image-container img',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story-card, .block-preview, .list-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .story-headline',
+        link: 'h1 a, h2 a, h3 a, .headline-link, .story-headline a',
+        image: 'img, .image-container img, .story-image',
+        date: '.date, time, .timestamp, .story-date'
       }
     },
     {
       name: 'Today Online',
       url: 'https://www.todayonline.com',
       selectors: {
-        container: 'article, .card, .teaser',
-        title: 'h1 a, h2 a, h3 a, .teaser__title',
-        link: 'h1 a, h2 a, h3 a, .teaser__title a',
-        image: 'img, .teaser__image',
+        container: 'article, .card, .teaser, .story',
+        title: 'h1 a, h2 a, h3 a, .teaser__title, .headline',
+        link: 'h1 a, h2 a, h3 a, .teaser__title a, .headline a',
+        image: 'img, .teaser__image, .story-image',
         date: '.date, time, .timestamp'
       }
     },
@@ -43,10 +43,10 @@ const NEWS_SOURCES = {
       name: 'Mothership',
       url: 'https://mothership.sg',
       selectors: {
-        container: 'article, .post-block, .card',
-        title: 'h1 a, h2 a, h3 a, .post-title',
-        link: 'h1 a, h2 a, h3 a, .post-title a',
-        image: 'img, .post-image',
+        container: 'article, .post-block, .card, .teaser',
+        title: 'h1 a, h2 a, h3 a, .post-title, .teaser__title',
+        link: 'h1 a, h2 a, h3 a, .post-title a, .teaser__title a',
+        image: 'img, .post-image, .teaser__image',
         date: '.date, time, .timestamp'
       }
     },
@@ -54,22 +54,22 @@ const NEWS_SOURCES = {
       name: 'Lianhe Zaobao',
       url: 'https://www.zaobao.com.sg',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h1 a, h2 a, h3 a, .headline',
-        link: 'h1 a, h2 a, h3 a, .headline a',
-        image: 'img, .image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story, .news-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
+        image: 'img, .image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     },
     {
       name: 'Shin Min Daily',
       url: 'https://www.shinmin.sg',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h1 a, h2 a, h3 a, .headline',
-        link: 'h1 a, h2 a, h3 a, .headline a',
-        image: 'img, .image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story, .news-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
+        image: 'img, .image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     }
   ],
@@ -78,88 +78,88 @@ const NEWS_SOURCES = {
       name: 'The Star',
       url: 'https://www.thestar.com.my',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h2 a, h3 a, .title',
-        link: 'h2 a, h3 a, .title a',
-        image: 'img, .image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story, .news-item',
+        title: 'h2 a, h3 a, .title, .headline',
+        link: 'h2 a, h3 a, .title a, .headline a',
+        image: 'img, .image, .story-image',
+        date: '.date, time, .timestamp, .story-date'
       }
     },
     {
       name: 'Malay Mail',
       url: 'https://www.malaymail.com',
       selectors: {
-        container: 'article, .card, .story-item',
-        title: 'h2 a, h3 a, .headline',
-        link: 'h2 a, h3 a, .headline a',
-        image: 'img, .story-image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story-item, .news-item',
+        title: 'h2 a, h3 a, .headline, .news-title',
+        link: 'h2 a, h3 a, .headline a, .news-title a',
+        image: 'img, .story-image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     },
     {
       name: 'NST Online',
       url: 'https://www.nst.com.my',
       selectors: {
-        container: 'article, .card, .teaser',
-        title: 'h2 a, h3 a, .title',
-        link: 'h2 a, h3 a, .title a',
-        image: 'img, .teaser-image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .teaser, .story',
+        title: 'h2 a, h3 a, .title, .headline',
+        link: 'h2 a, h3 a, .title a, .headline a',
+        image: 'img, .teaser-image, .story-image',
+        date: '.date, time, .timestamp, .story-date'
       }
     },
     {
       name: 'Free Malaysia Today',
       url: 'https://www.freemalaysiatoday.com',
       selectors: {
-        container: 'article, .post, .card',
-        title: 'h2 a, h3 a, .post-title',
-        link: 'h2 a, h3 a, .post-title a',
-        image: 'img, .post-image',
-        date: '.date, time, .timestamp'
+        container: 'article, .post, .card, .news-item',
+        title: 'h2 a, h3 a, .post-title, .news-title',
+        link: 'h2 a, h3 a, .post-title a, .news-title a',
+        image: 'img, .post-image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     },
     {
       name: 'Sin Chew Daily',
       url: 'https://www.sinchew.com.my',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h1 a, h2 a, h3 a, .headline',
-        link: 'h1 a, h2 a, h3 a, .headline a',
-        image: 'img, .image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story, .news-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
+        image: 'img, .image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     },
     {
       name: 'China Press',
       url: 'https://www.chinapress.com.my',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h1 a, h2 a, h3 a, .headline',
-        link: 'h1 a, h2 a, h3 a, .headline a',
-        image: 'img, .image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story, .news-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
+        image: 'img, .image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     },
     {
       name: 'Guang Ming Daily',
       url: 'https://www.guangming.com.my',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h1 a, h2 a, h3 a, .headline',
-        link: 'h1 a, h2 a, h3 a, .headline a',
-        image: 'img, .image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story, .news-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
+        image: 'img, .image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     },
     {
       name: 'Nanyang Siang Pau',
       url: 'https://www.nanyang.com.my',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h1 a, h2 a, h3 a, .headline',
-        link: 'h1 a, h2 a, h3 a, .headline a',
-        image: 'img, .image',
-        date: '.date, time, .timestamp'
+        container: 'article, .card, .story, .news-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
+        image: 'img, .image, .news-image',
+        date: '.date, time, .timestamp, .news-date'
       }
     }
   ],
