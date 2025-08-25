@@ -85,6 +85,16 @@ app.get('/api/news/business', async (req, res) => {
   }
 });
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'QWEN-NEWS API is running',
+    timestamp: new Date()
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Health check endpoint: http://localhost:${PORT}/api/health`);
 });
