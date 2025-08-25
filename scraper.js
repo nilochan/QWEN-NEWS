@@ -1,5 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const fs = require('fs');
+const path = require('path');
 
 // News sources with selectors for titles, links, images, and dates
 const NEWS_SOURCES = {
@@ -76,6 +78,44 @@ const NEWS_SOURCES = {
     }
   ]
 };
+
+// Function to update project statistics
+function updateStats(stats) {
+  const statsFile = path.join(__dirname, 'project-stats.json');
+  
+  try {
+    let currentStats = {
+      startTime: Date.now(),
+      totalRequests: 0,
+      totalScrapedArticles: 0,
+      averageResponseTime: 0,
+      errors: 0,
+      lastUpdated: new Date().toISOString(),
+      uptimeHours: 0
+    };
+    
+    // Load existing stats if file exists
+    if (fs.existsSync(statsFile)) {
+      currentStats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+    }
+    
+    // Update stats
+    Object.keys(stats).forEach(key => {
+      if (currentStats[key] !== undefined) {
+        currentStats[key] += stats[key];
+      }
+    });
+    
+    // Calculate uptime
+    currentStats.uptimeHours = (Date.now() - currentStats.startTime) / (1000 * 60 * 60);
+    currentStats.lastUpdated = new Date().toISOString();
+    
+    // Save updated stats
+    fs.writeFileSync(statsFile, JSON.stringify(currentStats, null, 2));
+  } catch (error) {
+    console.error('Error updating stats:', error.message);
+  }
+}
 
 // Function to extract and parse date from element
 function extractDate($, element, source) {
@@ -186,6 +226,7 @@ async function scrapeNewsSource(source, category = 'general') {
     return articles;
   } catch (error) {
     console.error(`Error scraping ${source.name}:`, error.message);
+    updateStats({ errors: 1 });
     return [];
   }
 }
@@ -229,13 +270,23 @@ async function getAllNews() {
   }
   
   const endTime = Date.now();
-  console.log(`Scraped ${allNews.length} articles in ${endTime - startTime}ms`);
+  const responseTime = endTime - startTime;
+  
+  console.log(`Scraped ${allNews.length} articles in ${responseTime}ms`);
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    totalScrapedArticles: allNews.length,
+    averageResponseTime: responseTime
+  });
   
   return allNews;
 }
 
 // Function to get Singapore news only
 async function getSingaporeNews() {
+  const startTime = Date.now();
   const singaporeNews = [];
   
   for (const source of NEWS_SOURCES.singapore) {
@@ -243,11 +294,22 @@ async function getSingaporeNews() {
     singaporeNews.push(...articles);
   }
   
+  const endTime = Date.now();
+  const responseTime = endTime - startTime;
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    totalScrapedArticles: singaporeNews.length,
+    averageResponseTime: responseTime
+  });
+  
   return singaporeNews;
 }
 
 // Function to get Malaysia news only
 async function getMalaysiaNews() {
+  const startTime = Date.now();
   const malaysiaNews = [];
   
   for (const source of NEWS_SOURCES.malaysia) {
@@ -255,11 +317,22 @@ async function getMalaysiaNews() {
     malaysiaNews.push(...articles);
   }
   
+  const endTime = Date.now();
+  const responseTime = endTime - startTime;
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    totalScrapedArticles: malaysiaNews.length,
+    averageResponseTime: responseTime
+  });
+  
   return malaysiaNews;
 }
 
 // Function to get Business news only
 async function getBusinessNews() {
+  const startTime = Date.now();
   const businessNews = [];
   
   for (const source of NEWS_SOURCES.business) {
@@ -267,18 +340,40 @@ async function getBusinessNews() {
     businessNews.push(...articles);
   }
   
+  const endTime = Date.now();
+  const responseTime = endTime - startTime;
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    totalScrapedArticles: businessNews.length,
+    averageResponseTime: responseTime
+  });
+  
   return businessNews;
 }
 
 // Function to search news by keyword
 async function searchNews(keyword) {
+  const startTime = Date.now();
   const allNews = await getAllNews();
   const searchTerm = keyword.toLowerCase();
   
-  return allNews.filter(article => 
+  const results = allNews.filter(article => 
     article.title.toLowerCase().includes(searchTerm) ||
     article.source.toLowerCase().includes(searchTerm)
   );
+  
+  const endTime = Date.now();
+  const responseTime = endTime - startTime;
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    averageResponseTime: responseTime
+  });
+  
+  return results;
 }
 
 module.exports = {

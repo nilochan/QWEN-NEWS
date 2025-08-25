@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const { getAllNews, getSingaporeNews, getMalaysiaNews, getBusinessNews, searchNews } = require('./scraper');
 
 const app = express();
@@ -8,9 +9,36 @@ const PORT = process.env.PORT || 3000;
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-// Middleware to log requests
+// Middleware to log requests and update stats
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  
+  // Update request stats
+  const statsFile = path.join(__dirname, 'project-stats.json');
+  try {
+    let stats = {
+      startTime: Date.now(),
+      totalRequests: 0,
+      totalScrapedArticles: 0,
+      averageResponseTime: 0,
+      errors: 0,
+      lastUpdated: new Date().toISOString(),
+      uptimeHours: 0
+    };
+    
+    if (fs.existsSync(statsFile)) {
+      stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+    }
+    
+    stats.totalRequests += 1;
+    stats.lastUpdated = new Date().toISOString();
+    stats.uptimeHours = (Date.now() - stats.startTime) / (1000 * 60 * 60);
+    
+    fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+  } catch (error) {
+    console.error('Error updating request stats:', error.message);
+  }
+  
   next();
 });
 
@@ -36,6 +64,31 @@ app.get('/api/news', async (req, res) => {
       }
     });
   } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
     res.status(500).json({
       status: 'error',
       message: 'Failed to fetch news',
@@ -61,6 +114,31 @@ app.get('/api/news/singapore', async (req, res) => {
       }
     });
   } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
     res.status(500).json({
       status: 'error',
       message: 'Failed to fetch Singapore news',
@@ -86,6 +164,31 @@ app.get('/api/news/malaysia', async (req, res) => {
       }
     });
   } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
     res.status(500).json({
       status: 'error',
       message: 'Failed to fetch Malaysia news',
@@ -111,6 +214,31 @@ app.get('/api/news/business', async (req, res) => {
       }
     });
   } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
     res.status(500).json({
       status: 'error',
       message: 'Failed to fetch Business news',
@@ -146,6 +274,31 @@ app.get('/api/news/search', async (req, res) => {
       }
     });
   } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
     res.status(500).json({
       status: 'error',
       message: 'Failed to search news',
@@ -163,9 +316,59 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Stats endpoint
+app.get('/api/stats', (req, res) => {
+  const statsFile = path.join(__dirname, 'project-stats.json');
+  
+  try {
+    if (fs.existsSync(statsFile)) {
+      const stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      res.json({
+        status: 'success',
+        data: stats
+      });
+    } else {
+      res.json({
+        status: 'success',
+        data: {
+          startTime: Date.now(),
+          totalRequests: 0,
+          totalScrapedArticles: 0,
+          averageResponseTime: 0,
+          errors: 0,
+          lastUpdated: new Date().toISOString(),
+          uptimeHours: 0
+        }
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch stats',
+      error: error.message
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📊 Health check endpoint: http://localhost:${PORT}/api/health`);
+  console.log(`📈 Stats endpoint: http://localhost:${PORT}/api/stats`);
   console.log(`📰 News API endpoint: http://localhost:${PORT}/api/news`);
   console.log(`🔍 Search API endpoint: http://localhost:${PORT}/api/news/search?q=keyword`);
+  
+  // Initialize stats file
+  const statsFile = path.join(__dirname, 'project-stats.json');
+  if (!fs.existsSync(statsFile)) {
+    const initialStats = {
+      startTime: Date.now(),
+      totalRequests: 0,
+      totalScrapedArticles: 0,
+      averageResponseTime: 0,
+      errors: 0,
+      lastUpdated: new Date().toISOString(),
+      uptimeHours: 0
+    };
+    fs.writeFileSync(statsFile, JSON.stringify(initialStats, null, 2));
+  }
 });
