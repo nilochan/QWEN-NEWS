@@ -4,96 +4,352 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QWEN-NEWS - Singapore & Malaysia News Aggregator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #0ea5e9;
+            --accent-color: #8b5cf6;
+            --light-color: #f8fafc;
+            --dark-color: #0f172a;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--gray-100) 0%, #e0f2fe 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 0 20px;
         }
+
+        /* Header Styles */
         header {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #007acc;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            font-weight: 300;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+        }
+
+        /* Filter Styles */
+        .filters {
+            background: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid var(--gray-200);
+            color: var(--dark-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary-color);
+        }
+
+        .filter-btn.active, .filter-btn:active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* News Grid */
+        .news-container {
+            padding: 1rem 0 3rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
         .news-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
         }
+
         .news-card {
             background: white;
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
-        .news-card h3 {
-            margin-top: 0;
-            color: #333;
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
-        .news-card p {
-            color: #666;
-        }
-        .source {
-            font-size: 0.8em;
-            color: #007acc;
-            font-weight: bold;
-        }
-        .category-filter {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        button {
-            background-color: #007acc;
+
+        .card-badge {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 5px;
-            border-radius: 3px;
-            cursor: pointer;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        button:hover {
-            background-color: #005a99;
+
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
-        .loading {
-            text-align: center;
-            padding: 20px;
+
+        .card-title {
+            margin-bottom: 1rem;
+            flex-grow: 1;
         }
-        .error {
-            color: red;
-            text-align: center;
-            padding: 20px;
+
+        .card-title a {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            transition: color 0.2s ease;
         }
+
+        .card-title a:hover {
+            color: var(--primary-color);
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .source {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
         .timestamp {
-            font-size: 0.7em;
-            color: #999;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        /* Status Messages */
+        .status-message {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+        }
+
+        .status-message i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .loading {
+            color: var(--primary-color);
+        }
+
+        .error {
+            color: var(--danger-color);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                justify-content: center;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+            }
+
+            .news-grid {
+                gap: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>QWEN-NEWS</h1>
-        <p>Latest news from Singapore and Malaysia</p>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-newspaper"></i>
+                    <div>
+                        <h1>QWEN-<span>NEWS</span></h1>
+                        <div class="tagline">Your gateway to Singapore & Malaysia news</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <div class="category-filter">
-        <button id="all-news">All News</button>
-        <button id="singapore-news">Singapore</button>
-        <button id="malaysia-news">Malaysia</button>
-        <button>Politics</button>
-        <button>Business</button>
-        <button>Technology</button>
-        <button>Sports</button>
-        <button>Entertainment</button>
+    <div class="filters">
+        <div class="container">
+            <div class="filter-buttons">
+                <button id="all-news" class="filter-btn active">
+                    <i class="fas fa-globe-asia"></i> All News
+                </button>
+                <button id="singapore-news" class="filter-btn">
+                    <i class="fas fa-flag"></i> Singapore
+                </button>
+                <button id="malaysia-news" class="filter-btn">
+                    <i class="fas fa-flag"></i> Malaysia
+                </button>
+                <button class="filter-btn">
+                    <i class="fas fa-business-time"></i> Business
+                </button>
+                <button class="filter-btn">
+                    <i class="fas fa-flask"></i> Technology
+                </button>
+                <button class="filter-btn">
+                    <i class="fas fa-futbol"></i> Sports
+                </button>
+                <button class="filter-btn">
+                    <i class="fas fa-music"></i> Entertainment
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div id="news-container">
-        <div class="loading">Loading news...</div>
+    <div class="container">
+        <div class="news-container">
+            <h2 class="section-title">Latest News</h2>
+            <div id="news-container">
+                <div class="status-message loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Loading latest news...</h3>
+                    <p>Please wait while we fetch the most recent articles</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 QWEN-NEWS. Aggregating news from Singapore and Malaysia.</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -103,10 +359,31 @@
             fetchAllNews();
             
             // Add event listeners to filter buttons
-            document.getElementById('all-news').addEventListener('click', fetchAllNews);
-            document.getElementById('singapore-news').addEventListener('click', fetchSingaporeNews);
-            document.getElementById('malaysia-news').addEventListener('click', fetchMalaysiaNews);
+            document.getElementById('all-news').addEventListener('click', function() {
+                setActiveButton(this);
+                fetchAllNews();
+            });
+            
+            document.getElementById('singapore-news').addEventListener('click', function() {
+                setActiveButton(this);
+                fetchSingaporeNews();
+            });
+            
+            document.getElementById('malaysia-news').addEventListener('click', function() {
+                setActiveButton(this);
+                fetchMalaysiaNews();
+            });
         });
+        
+        function setActiveButton(activeButton) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            activeButton.classList.add('active');
+        }
         
         async function fetchAllNews() {
             try {
@@ -120,7 +397,7 @@
                 }
             } catch (error) {
                 console.error('Error fetching news:', error);
-                displayError('Error loading news');
+                displayError('Error loading news. Please try again later.');
             }
         }
         
@@ -131,10 +408,14 @@
                 
                 // For now, we'll just show a message
                 document.getElementById('news-container').innerHTML = 
-                    '<div class="loading">Singapore news filtering - to be implemented</div>';
+                    `<div class="status-message loading">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Singapore news filtering coming soon</h3>
+                        <p>This feature is being implemented. Please check back later.</p>
+                    </div>`;
             } catch (error) {
                 console.error('Error fetching Singapore news:', error);
-                displayError('Error loading Singapore news');
+                displayError('Error loading Singapore news. Please try again later.');
             }
         }
         
@@ -145,10 +426,14 @@
                 
                 // For now, we'll just show a message
                 document.getElementById('news-container').innerHTML = 
-                    '<div class="loading">Malaysia news filtering - to be implemented</div>';
+                    `<div class="status-message loading">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Malaysia news filtering coming soon</h3>
+                        <p>This feature is being implemented. Please check back later.</p>
+                    </div>`;
             } catch (error) {
                 console.error('Error fetching Malaysia news:', error);
-                displayError('Error loading Malaysia news');
+                displayError('Error loading Malaysia news. Please try again later.');
             }
         }
         
@@ -156,18 +441,45 @@
             const container = document.getElementById('news-container');
             
             if (newsData.length === 0) {
-                container.innerHTML = '<div class="loading">No news articles found</div>';
+                container.innerHTML = 
+                    `<div class="status-message">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No news articles found</h3>
+                        <p>We couldn't find any articles at this time. Please try again later.</p>
+                    </div>`;
                 return;
             }
             
             let newsHTML = '<div class="news-grid">';
             
             newsData.forEach(article => {
+                // Determine if it's Singapore or Malaysia news for badge
+                const isSingapore = article.source.includes('Channel NewsAsia') || 
+                                   article.source.includes('Straits Times') || 
+                                   article.source.includes('Today');
+                const isMalaysia = article.source.includes('Star') || 
+                                  article.source.includes('Malay Mail') || 
+                                  article.source.includes('NST');
+                
+                const badgeText = isSingapore ? 'Singapore' : isMalaysia ? 'Malaysia' : 'General';
+                const badgeClass = isSingapore ? 'singapore' : isMalaysia ? 'malaysia' : 'general';
+                
                 newsHTML += `
                     <div class="news-card">
-                        <h3><a href="${article.link}" target="_blank">${article.title}</a></h3>
-                        <div class="source">Source: ${article.source}</div>
-                        <div class="timestamp">Fetched: ${new Date(article.timestamp).toLocaleString()}</div>
+                        <div class="card-badge">${badgeText}</div>
+                        <div class="card-content">
+                            <div class="card-title">
+                                <a href="${article.link}" target="_blank">${article.title}</a>
+                            </div>
+                            <div class="card-meta">
+                                <div class="source">
+                                    <i class="fas fa-link"></i> ${article.source}
+                                </div>
+                                <div class="timestamp">
+                                    <i class="far fa-clock"></i> ${new Date(article.timestamp).toLocaleDateString()}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `;
             });
@@ -178,7 +490,11 @@
         
         function displayError(message) {
             document.getElementById('news-container').innerHTML = 
-                `<div class="error">${message}</div>`;
+                `<div class="status-message error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Something went wrong</h3>
+                    <p>${message}</p>
+                </div>`;
         }
     </script>
 </body>
