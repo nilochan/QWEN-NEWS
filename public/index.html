@@ -575,6 +575,15 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link" data-filter="sports">Sports</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="entertainment">Entertainment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="health">Health</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-filter="science">Science</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -611,6 +620,9 @@
                         <li><a href="#" data-filter="business">Business</a></li>
                         <li><a href="#" data-filter="technology">Technology</a></li>
                         <li><a href="#" data-filter="sports">Sports</a></li>
+                        <li><a href="#" data-filter="entertainment">Entertainment</a></li>
+                        <li><a href="#" data-filter="health">Health</a></li>
+                        <li><a href="#" data-filter="science">Science</a></li>
                     </ul>
                 </div>
                 
@@ -802,6 +814,18 @@
                     case 'sports':
                         response = await fetch('/api/news/sports');
                         document.getElementById('section-title').textContent = 'Sports News';
+                        break;
+                    case 'entertainment':
+                        response = await fetch('/api/news/entertainment');
+                        document.getElementById('section-title').textContent = 'Entertainment News';
+                        break;
+                    case 'health':
+                        response = await fetch('/api/news/health');
+                        document.getElementById('section-title').textContent = 'Health News';
+                        break;
+                    case 'science':
+                        response = await fetch('/api/news/science');
+                        document.getElementById('section-title').textContent = 'Science News';
                         break;
                     default:
                         response = await fetch('/api/news');

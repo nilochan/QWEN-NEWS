@@ -8,6 +8,9 @@ const {
   getBusinessNews, 
   getTechnologyNews, 
   getSportsNews, 
+  getEntertainmentNews, 
+  getHealthNews, 
+  getScienceNews, 
   searchNews 
 } = require('./scraper');
 
@@ -350,6 +353,156 @@ app.get('/api/news/sports', async (req, res) => {
     res.status(500).json({
       status: 'error',
       message: 'Failed to fetch Sports news',
+      error: error.message
+    });
+  }
+});
+
+// API endpoint for Entertainment news only
+app.get('/api/news/entertainment', async (req, res) => {
+  try {
+    const startTime = Date.now();
+    const news = await getEntertainmentNews();
+    const endTime = Date.now();
+    
+    res.json({
+      status: 'success',
+      count: news.length,
+      data: news,
+      metadata: {
+        requestTime: endTime - startTime,
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch Entertainment news',
+      error: error.message
+    });
+  }
+});
+
+// API endpoint for Health news only
+app.get('/api/news/health', async (req, res) => {
+  try {
+    const startTime = Date.now();
+    const news = await getHealthNews();
+    const endTime = Date.now();
+    
+    res.json({
+      status: 'success',
+      count: news.length,
+      data: news,
+      metadata: {
+        requestTime: endTime - startTime,
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch Health news',
+      error: error.message
+    });
+  }
+});
+
+// API endpoint for Science news only
+app.get('/api/news/science', async (req, res) => {
+  try {
+    const startTime = Date.now();
+    const news = await getScienceNews();
+    const endTime = Date.now();
+    
+    res.json({
+      status: 'success',
+      count: news.length,
+      data: news,
+      metadata: {
+        requestTime: endTime - startTime,
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    // Update error stats
+    const statsFile = path.join(__dirname, 'project-stats.json');
+    try {
+      let stats = {
+        startTime: Date.now(),
+        totalRequests: 0,
+        totalScrapedArticles: 0,
+        averageResponseTime: 0,
+        errors: 0,
+        lastUpdated: new Date().toISOString(),
+        uptimeHours: 0
+      };
+      
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      }
+      
+      stats.errors += 1;
+      stats.lastUpdated = new Date().toISOString();
+      
+      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    } catch (statsError) {
+      console.error('Error updating error stats:', statsError.message);
+    }
+    
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to fetch Science news',
       error: error.message
     });
   }

@@ -122,44 +122,44 @@ const NEWS_SOURCES = {
       name: 'Sin Chew Daily',
       url: 'https://www.sinchew.com.my',
       selectors: {
-        container: 'article, .card, .story, .news-item',
-        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
-        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
-        image: 'img, .image, .news-image',
-        date: '.date, time, .timestamp, .news-date'
+        container: 'article, .card, .story, .news-item, .list-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title, .title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a, .title a',
+        image: 'img, .image, .news-image, .pic',
+        date: '.date, time, .timestamp, .news-date, .time'
       }
     },
     {
       name: 'China Press',
       url: 'https://www.chinapress.com.my',
       selectors: {
-        container: 'article, .card, .story, .news-item',
-        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
-        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
-        image: 'img, .image, .news-image',
-        date: '.date, time, .timestamp, .news-date'
+        container: 'article, .card, .story, .news-item, .list-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title, .title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a, .title a',
+        image: 'img, .image, .news-image, .pic',
+        date: '.date, time, .timestamp, .news-date, .time'
       }
     },
     {
       name: 'Guang Ming Daily',
       url: 'https://www.guangming.com.my',
       selectors: {
-        container: 'article, .card, .story, .news-item',
-        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
-        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
-        image: 'img, .image, .news-image',
-        date: '.date, time, .timestamp, .news-date'
+        container: 'article, .card, .story, .news-item, .list-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title, .title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a, .title a',
+        image: 'img, .image, .news-image, .pic',
+        date: '.date, time, .timestamp, .news-date, .time'
       }
     },
     {
       name: 'Nanyang Siang Pau',
       url: 'https://www.nanyang.com.my',
       selectors: {
-        container: 'article, .card, .story, .news-item',
-        title: 'h1 a, h2 a, h3 a, .headline, .news-title',
-        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a',
-        image: 'img, .image, .news-image',
-        date: '.date, time, .timestamp, .news-date'
+        container: 'article, .card, .story, .news-item, .list-item',
+        title: 'h1 a, h2 a, h3 a, .headline, .news-title, .title',
+        link: 'h1 a, h2 a, h3 a, .headline a, .news-title a, .title a',
+        image: 'img, .image, .news-image, .pic',
+        date: '.date, time, .timestamp, .news-date, .time'
       }
     }
   ],
@@ -168,44 +168,44 @@ const NEWS_SOURCES = {
       name: 'CNBC',
       url: 'https://www.cnbc.com',
       selectors: {
-        container: 'article, .Card, .story',
-        title: 'h2 a, h3 a, .Card-title',
-        link: 'h2 a, h3 a, .Card-title a',
-        image: 'img, .Card-image',
-        date: '.date, time, .timestamp'
+        container: 'article, .Card, .story, .Layout layout',
+        title: 'h2 a, h3 a, .Card-title, .headline',
+        link: 'h2 a, h3 a, .Card-title a, .headline a',
+        image: 'img, .Card-image, .image',
+        date: '.date, time, .timestamp, .time'
       }
     },
     {
-      name: 'Bloomberg',
-      url: 'https://www.bloomberg.com',
+      name: 'MarketWatch',
+      url: 'https://www.marketwatch.com',
       selectors: {
-        container: 'article, .card, .story',
-        title: 'h1 a, h2 a, h3 a, .story-title',
-        link: 'h1 a, h2 a, h3 a, .story-title a',
-        image: 'img, .story-image',
-        date: '.date, time, .timestamp'
+        container: 'article, .content-item, .card',
+        title: 'h3 a, .content-item__title, .headline',
+        link: 'h3 a, .content-item__title a, .headline a',
+        image: 'img, .content-item__image, .image',
+        date: '.date, time, .timestamp, .time'
       }
     },
     {
-      name: 'Reuters',
-      url: 'https://www.reuters.com',
+      name: 'Yahoo Finance',
+      url: 'https://finance.yahoo.com',
       selectors: {
-        container: 'article, .story, .media-story',
-        title: 'h2 a, h3 a, .story-title',
-        link: 'h2 a, h3 a, .story-title a',
-        image: 'img, .story-image',
-        date: '.date, time, .timestamp'
+        container: 'article, .js-content-viewer div, .Cf',
+        title: 'h3 a, .js-content-viewer h3, .Cf h3',
+        link: 'h3 a, .js-content-viewer h3 a, .Cf h3 a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp, .time'
       }
     },
     {
-      name: 'Financial Times',
-      url: 'https://www.ft.com',
+      name: 'Investing.com',
+      url: 'https://www.investing.com',
       selectors: {
-        container: 'article, .o-teaser, .story',
-        title: 'h2 a, h3 a, .o-teaser__heading',
-        link: 'h2 a, h3 a, .o-teaser__heading a',
-        image: 'img, .o-teaser__image',
-        date: '.date, time, .timestamp'
+        container: 'article, .largeTitle, .textDiv',
+        title: 'h2 a, .largeTitle h2, .textDiv h2',
+        link: 'h2 a, .largeTitle h2 a, .textDiv h2 a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp, .time'
       }
     }
   ],
@@ -231,6 +231,17 @@ const NEWS_SOURCES = {
         image: 'img, .c-entry-box__image',
         date: '.date, time, .timestamp'
       }
+    },
+    {
+      name: 'Wired',
+      url: 'https://www.wired.com',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h2 a, h3 a, .heading',
+        link: 'h2 a, h3 a, .heading a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
     }
   ],
   sports: [
@@ -253,6 +264,78 @@ const NEWS_SOURCES = {
         title: 'h2 a, h3 a, .molecules-card__title',
         link: 'h2 a, h3 a, .molecules-card__title a',
         image: 'img, .molecules-card__image',
+        date: '.date, time, .timestamp'
+      }
+    }
+  ],
+  entertainment: [
+    {
+      name: 'Entertainment Weekly',
+      url: 'https://ew.com',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h2 a, h3 a, .headline',
+        link: 'h2 a, h3 a, .headline a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Variety',
+      url: 'https://variety.com',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h2 a, h3 a, .heading',
+        link: 'h2 a, h3 a, .heading a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    }
+  ],
+  health: [
+    {
+      name: 'WebMD',
+      url: 'https://www.webmd.com',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h2 a, h3 a, .headline',
+        link: 'h2 a, h3 a, .headline a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Healthline',
+      url: 'https://www.healthline.com',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h2 a, h3 a, .heading',
+        link: 'h2 a, h3 a, .heading a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    }
+  ],
+  science: [
+    {
+      name: 'Scientific American',
+      url: 'https://www.scientificamerican.com',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h2 a, h3 a, .heading',
+        link: 'h2 a, h3 a, .heading a',
+        image: 'img, .image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
+      name: 'Science Magazine',
+      url: 'https://www.science.org',
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h2 a, h3 a, .headline',
+        link: 'h2 a, h3 a, .headline a',
+        image: 'img, .image',
         date: '.date, time, .timestamp'
       }
     }
@@ -301,25 +384,27 @@ function updateStats(stats) {
 function extractDate($, element, source) {
   try {
     // Look for date elements within the article container
-    const dateElement = $(element).find(source.selectors.date).first();
-    if (dateElement.length > 0) {
+    const dateElements = $(element).find(source.selectors.date);
+    for (let i = 0; i < dateElements.length; i++) {
+      const dateElement = dateElements.eq(i);
       const dateText = dateElement.text().trim() || dateElement.attr('datetime');
       if (dateText) {
-        // Try to parse the date
-        const parsedDate = new Date(dateText);
-        if (!isNaN(parsedDate.getTime())) {
+        // Try to parse the date with multiple formats
+        const parsedDate = parseDate(dateText);
+        if (parsedDate && !isNaN(parsedDate.getTime())) {
           return parsedDate;
         }
       }
     }
     
     // If no date found, try to find it in the article metadata
-    const timeElement = $(element).find('time').first();
-    if (timeElement.length > 0) {
+    const timeElements = $(element).find('time');
+    for (let i = 0; i < timeElements.length; i++) {
+      const timeElement = timeElements.eq(i);
       const dateTime = timeElement.attr('datetime') || timeElement.text().trim();
       if (dateTime) {
-        const parsedDate = new Date(dateTime);
-        if (!isNaN(parsedDate.getTime())) {
+        const parsedDate = parseDate(dateTime);
+        if (parsedDate && !isNaN(parsedDate.getTime())) {
           return parsedDate;
         }
       }
@@ -331,6 +416,81 @@ function extractDate($, element, source) {
     // If any error occurs, return current date
     return new Date();
   }
+}
+
+// Function to parse dates in various formats
+function parseDate(dateString) {
+  if (!dateString) return null;
+  
+  // Clean the date string
+  const cleanDate = dateString.trim().replace(/\s+/g, ' ');
+  
+  // Try different date parsing approaches
+  const formats = [
+    // Standard ISO format
+    () => new Date(cleanDate),
+    
+    // Common formats
+    () => new Date(cleanDate.replace(/(\d+)(st|nd|rd|th)/g, '$1')),
+    
+    // Format: "Month Day, Year"
+    () => {
+      const match = cleanDate.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})/);
+      if (match) {
+        return new Date(`${match[1]} ${match[2]}, ${match[3]}`);
+      }
+      return null;
+    },
+    
+    // Format: "Day Month Year"
+    () => {
+      const match = cleanDate.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
+      if (match) {
+        return new Date(`${match[2]} ${match[1]}, ${match[3]}`);
+      }
+      return null;
+    },
+    
+    // Format: "YYYY-MM-DD"
+    () => {
+      const match = cleanDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (match) {
+        return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
+      }
+      return null;
+    },
+    
+    // Format: "MM/DD/YYYY"
+    () => {
+      const match = cleanDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (match) {
+        return new Date(parseInt(match[3]), parseInt(match[1]) - 1, parseInt(match[2]));
+      }
+      return null;
+    }
+  ];
+  
+  // Try each format
+  for (const format of formats) {
+    try {
+      const result = format();
+      if (result && !isNaN(result.getTime())) {
+        // Check if the date is reasonable (not in the future and not too old)
+        const now = new Date();
+        const oneYearAgo = new Date();
+        oneYearAgo.setFullYear(now.getFullYear() - 1);
+        
+        if (result <= now && result >= oneYearAgo) {
+          return result;
+        }
+      }
+    } catch (e) {
+      // Continue to next format
+    }
+  }
+  
+  // If all formats fail, return null
+  return null;
 }
 
 // Function to scrape news from a source with enhanced logic
@@ -675,6 +835,87 @@ async function getSportsNews() {
   return sportsNews;
 }
 
+// Function to get Entertainment news only
+async function getEntertainmentNews() {
+  const startTime = Date.now();
+  const entertainmentNews = [];
+  
+  if (NEWS_SOURCES.entertainment) {
+    for (const source of NEWS_SOURCES.entertainment) {
+      const articles = await scrapeNewsSource(source, 'entertainment');
+      entertainmentNews.push(...articles);
+    }
+  }
+  
+  const endTime = Date.now();
+  const responseTime = endTime - startTime;
+  
+  console.log(`Scraped ${entertainmentNews.length} Entertainment articles in ${responseTime}ms`);
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    totalScrapedArticles: entertainmentNews.length,
+    averageResponseTime: responseTime
+  });
+  
+  return entertainmentNews;
+}
+
+// Function to get Health news only
+async function getHealthNews() {
+  const startTime = Date.now();
+  const healthNews = [];
+  
+  if (NEWS_SOURCES.health) {
+    for (const source of NEWS_SOURCES.health) {
+      const articles = await scrapeNewsSource(source, 'health');
+      healthNews.push(...articles);
+    }
+  }
+  
+  const endTime = Date.now();
+  const responseTime = endTime - startTime;
+  
+  console.log(`Scraped ${healthNews.length} Health articles in ${responseTime}ms`);
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    totalScrapedArticles: healthNews.length,
+    averageResponseTime: responseTime
+  });
+  
+  return healthNews;
+}
+
+// Function to get Science news only
+async function getScienceNews() {
+  const startTime = Date.now();
+  const scienceNews = [];
+  
+  if (NEWS_SOURCES.science) {
+    for (const source of NEWS_SOURCES.science) {
+      const articles = await scrapeNewsSource(source, 'science');
+      scienceNews.push(...articles);
+    }
+  }
+  
+  const endTime = Date.now();
+  const responseTime = endTime - startTime;
+  
+  console.log(`Scraped ${scienceNews.length} Science articles in ${responseTime}ms`);
+  
+  // Update stats
+  updateStats({
+    totalRequests: 1,
+    totalScrapedArticles: scienceNews.length,
+    averageResponseTime: responseTime
+  });
+  
+  return scienceNews;
+}
+
 // Function to search news by keyword
 async function searchNews(keyword) {
   const startTime = Date.now();
@@ -705,6 +946,9 @@ module.exports = {
   getBusinessNews,
   getTechnologyNews,
   getSportsNews,
+  getEntertainmentNews,
+  getHealthNews,
+  getScienceNews,
   searchNews,
   NEWS_SOURCES
 };
