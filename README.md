@@ -5,9 +5,11 @@ An interactive website that gathers news from multiple sources in Singapore and 
 ## ✨ Features
 
 - **News Aggregation**: Real-time news from Singapore and Malaysia sources
-- **Beautiful UI**: Modern, responsive design with intuitive navigation
+- **Professional UI**: Mimics international news portals with modern design
 - **Source Filtering**: Filter news by Singapore, Malaysia, or Business sources
+- **Search Functionality**: Search news by keywords
 - **Image Support**: Visual thumbnails for each news article
+- **Accurate Dates**: Extracts real publication dates from news sources
 - **Direct Linking**: Click through to original news sources
 - **Mobile Responsive**: Works on all device sizes
 
@@ -17,6 +19,7 @@ An interactive website that gathers news from multiple sources in Singapore and 
 - **Web Scraping**: Axios and Cheerio
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
 - **Styling**: Modern CSS with Flexbox and Grid
+- **Fonts**: Playfair Display and Roboto from Google Fonts
 - **Icons**: Font Awesome
 - **Deployment**: Railway with GitHub Integration
 
@@ -35,6 +38,9 @@ QWEN-NEWS/
 ├── README.md (This file)
 ├── index.js (Server logic)
 ├── scraper.js (News scraping logic)
+├── monitor.js (Node.js monitoring)
+├── monitor.ps1 (PowerShell monitoring)
+├── monitor.bat (Windows batch monitoring)
 ├── package.json (Dependencies)
 ├── package-lock.json (Dependency lock)
 └── railway.json (Railway config)
@@ -74,16 +80,20 @@ QWEN-NEWS/
 - `GET /api/news/singapore` - Retrieve Singapore news
 - `GET /api/news/malaysia` - Retrieve Malaysia news
 - `GET /api/news/business` - Retrieve Business news
+- `GET /api/news/search?q=keyword` - Search news by keyword
 - `GET /api/health` - Health check endpoint
 
 ## 🎨 UI/UX Features
 
-- Modern gradient-based design
+- Professional news portal design mimicking international newspapers
+- Featured article display for prominent stories
+- Category-based navigation with active state management
+- Search bar with real-time search functionality
 - Responsive card layout with images for news articles
-- Interactive filter buttons with hover effects
-- Loading and error states
-- Category-specific badges for news sources
-- Mobile-friendly navigation
+- Loading and error states with user-friendly messages
+- Category-specific styling for news sources
+- Mobile-friendly navigation and layout
+- Real publication dates extracted from news sources
 
 ## 📈 Current Features
 
@@ -92,19 +102,48 @@ QWEN-NEWS/
 - [x] Business news aggregation
 - [x] Image thumbnails for articles
 - [x] Category filtering (Singapore, Malaysia, Business)
+- [x] Keyword search functionality
+- [x] Accurate publication dates
 - [x] Responsive design
 - [x] Direct linking to original sources
 - [x] Health check monitoring
+- [x] Project monitoring system
+
+## 📊 Monitoring System
+
+The QWEN-NEWS project includes a comprehensive monitoring system to track performance, usage, and errors:
+
+### Node.js Monitoring
+```bash
+npm run monitor
+```
+
+### PowerShell Monitoring (Windows)
+```bash
+# Run the batch file
+monitor.bat
+
+# Or run directly with PowerShell
+powershell -ExecutionPolicy Bypass -File monitor.ps1 -Continuous
+```
+
+### Monitoring Features
+- Real-time project statistics
+- Performance metrics tracking
+- Error logging and reporting
+- Uptime monitoring
+- Resource usage tracking
 
 ## 📈 Future Enhancements
 
 - [ ] Advanced news filtering by additional categories
-- [ ] Search functionality
 - [ ] User accounts and preferences
 - [ ] Live chat integration
 - [ ] Social sharing features
 - [ ] Bookmarking favorite articles
 - [ ] Push notifications for breaking news
+- [ ] News article summarization
+- [ ] Multi-language support
 
 ## 🤝 Contributing
 
