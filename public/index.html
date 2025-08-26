@@ -224,11 +224,202 @@
             text-decoration: underline;
         }
 
+        /* Content Wrapper */
+        .content-wrapper {
+            display: flex;
+            gap: 2rem;
+        }
+
         /* News Grid */
         .news-grid {
+            flex: 1;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            width: 350px;
+            background: var(--light);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+            max-height: 800px;
+        }
+
+        .chat-panel.collapsed {
+            width: 50px;
+        }
+
+        .chat-header {
+            background: var(--secondary);
+            color: var(--light);
+            padding: 1rem;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header div:first-child {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .chat-status {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+
+        .chat-panel.collapsed .chat-header h3 {
+            display: none;
+        }
+
+        .chat-toggle {
+            background: none;
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .chat-toggle.online {
+            color: #4ade80;
+        }
+
+        .chat-toggle.offline {
+            color: #f87171;
+        }
+
+        .chat-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-panel.collapsed .chat-content {
+            display: none;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: 600px;
+            height: 500px;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            background: var(--gray-100);
+        }
+
+        .chat-message.system {
+            background: var(--accent);
+            color: var(--light);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .chat-message .username {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .chat-message .timestamp {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-left: 0.5rem;
+        }
+
+        .chat-message .text {
+            margin-top: 0.25rem;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--gray-300);
+        }
+
+        #username-input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+        }
+
+        #send-button {
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            border-radius: 4px;
+            padding: 0 1rem;
+            cursor: pointer;
+        }
+
+        #send-button:disabled {
+            background: var(--gray-400);
+            cursor: not-allowed;
+        }
+
+        /* Floating Chat Button */
+        .floating-chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            border-radius: 50%;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            .chat-panel {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .floating-chat-button {
+                display: flex;
+            }
         }
 
         /* Featured Article */
@@ -405,8 +596,25 @@
             color: var(--primary);
         }
 
-        .error {
+        .status-message.error {
             color: #dc3545;
+        }
+
+        .retry-button {
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: var(--transition);
+        }
+
+        .retry-button:hover {
+            background: #a00000;
+            transform: translateY(-2px);
         }
 
         /* Footer */
@@ -595,13 +803,43 @@
             <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
         </div>
         
-        <div class="news-grid" id="news-container">
-            <div class="status-message loading">
-                <i class="fas fa-spinner fa-spin"></i>
-                <h3>Loading latest news...</h3>
-                <p>Please wait while we fetch the most recent articles</p>
+        <div class="content-wrapper">
+            <div class="news-grid" id="news-container">
+                <div class="status-message loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Loading latest news...</h3>
+                    <p>Please wait while we fetch the most recent articles</p>
+                </div>
+            </div>
+            
+            <!-- Chat Panel -->
+            <div class="chat-panel" id="chat-panel">
+                <div class="chat-header">
+                    <div>
+                        <h3>Live Chat</h3>
+                        <div class="chat-status" id="chat-status">Connecting...</div>
+                    </div>
+                    <button class="chat-toggle" id="chat-toggle">
+                        <i class="fas fa-comments"></i>
+                    </button>
+                </div>
+                <div class="chat-content">
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <div class="chat-input-area">
+                        <input type="text" id="username-input" placeholder="Enter your name" />
+                        <div class="chat-input-container">
+                            <input type="text" id="chat-input" placeholder="Type your message..." disabled />
+                            <button id="send-button" disabled><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        
+        <!-- Floating Chat Button (Mobile) -->
+        <button class="floating-chat-button" id="floating-chat-button">
+            <i class="fas fa-comments"></i>
+        </button>
     </main>
 
     <footer>
@@ -651,14 +889,521 @@
             document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', options);
         }
 
+        <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Global error handler for fetch requests
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+        });
+        
+        // Add retry button to all error messages
+        function addRetryButtons() {
+            const errorMessages = document.querySelectorAll('.status-message.error, .status-message');
+            errorMessages.forEach(function(msg) {
+                if (!msg.querySelector('.retry-button')) {
+                    const retryBtn = document.createElement('button');
+                    retryBtn.className = 'retry-button';
+                    retryBtn.textContent = 'Retry';
+                    retryBtn.onclick = function() {
+                        location.reload();
+                    };
+                    msg.appendChild(retryBtn);
+                }
+            });
+        }
+        
+        // Run after DOM loads
+        document.addEventListener('DOMContentLoaded', addRetryButtons);
+    </script>
+    <script>
         // Set active navigation link
         function setActiveNav(filter) {
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             
-            document.querySelector(`.nav-link[data-filter="${filter}"]`).classList.add('active');
+            const activeLink = document.querySelector(`.nav-link[data-filter="${filter}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
         }
+
+        // Show loading state
+        function showLoading() {
+            document.getElementById('news-container').innerHTML = 
+                `<div class="status-message loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <h3>Loading news...</h3>
+                    <p>Please wait while we fetch the latest articles</p>
+                </div>`;
+        }
+
+        // Show error state
+        function showError(message) {
+            document.getElementById('news-container').innerHTML = 
+                `<div class="status-message error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Something went wrong</h3>
+                    <p>${message}</p>
+                </div>`;
+        }
+
+        // Get category class for styling
+        function getCategoryClass(category) {
+            const normalizedCategory = category.toLowerCase();
+            return `category-${normalizedCategory}`;
+        }
+
+        // Display news articles
+        function displayNews(articles) {
+            const container = document.getElementById('news-container');
+            
+            if (!articles || articles.length === 0) {
+                container.innerHTML = 
+                    `<div class="status-message">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No news articles found</h3>
+                        <p>We couldn't find any articles matching your criteria. Please try again later.</p>
+                    </div>`;
+                return;
+            }
+            
+            // Sort articles by date (newest first)
+            articles.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            let newsHTML = '';
+            
+            // Display up to 20 articles (including featured)
+            const displayCount = Math.min(articles.length, 20);
+            
+            // Create featured article (first article)
+            if (displayCount > 0) {
+                const featured = articles[0];
+                const category = featured.category.charAt(0).toUpperCase() + featured.category.slice(1);
+                const categoryClass = getCategoryClass(featured.category);
+                
+                newsHTML += `
+                    <article class="featured-article">
+                        <img src="${featured.image}" alt="${featured.title}" class="featured-image" onerror="this.src='https://placehold.co/800x400/c30000/white?text=Featured+News'">
+                        <div class="featured-content">
+                            <span class="featured-category ${categoryClass}">${category}</span>
+                            <h2 class="featured-title">
+                                <a href="${featured.link}" target="_blank">${featured.title}</a>
+                            </h2>
+                            <div class="featured-meta">
+                                <div class="featured-source">
+                                    <i class="fas fa-newspaper"></i>
+                                    <span>${featured.source}</span>
+                                </div>
+                                <div class="featured-date">
+                                    <i class="far fa-clock"></i>
+                                    <span>${featured.displayDate || new Date(featured.timestamp).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+            
+            // Create regular articles (remaining articles)
+            for (let i = 1; i < displayCount; i++) {
+                const article = articles[i];
+                const category = article.category.charAt(0).toUpperCase() + article.category.slice(1);
+                const categoryClass = getCategoryClass(article.category);
+                
+                newsHTML += `
+                    <article class="news-card">
+                        <img src="${article.image}" alt="${article.title}" class="card-image" onerror="this.src='https://placehold.co/600x400/64748b/white?text=${category}+News'">
+                        <div class="card-content">
+                            <span class="card-category ${categoryClass}">${category}</span>
+                            <h3 class="card-title">
+                                <a href="${article.link}" target="_blank">${article.title}</a>
+                            </h3>
+                            <div class="card-meta">
+                                <div class="card-source">
+                                    <i class="fas fa-newspaper"></i>
+                                    <span>${article.source}</span>
+                                </div>
+                                <div class="card-date">
+                                    <i class="far fa-clock"></i>
+                                    <span>${article.displayDate || new Date(article.timestamp).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+            
+            container.innerHTML = newsHTML;
+        }
+
+        // Fetch all news
+        async function fetchAllNews() {
+            try {
+                showLoading();
+                const response = await fetch('/api/news');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                    document.getElementById('section-title').textContent = 'Latest News';
+                } else {
+                    showError('Failed to load news');
+                }
+            } catch (error) {
+                console.error('Error fetching news:', error);
+                showError('Error loading news. Please try again later.');
+            }
+        }
+
+        // Fetch filtered news
+        async function fetchFilteredNews(filter) {
+            try {
+                showLoading();
+                let response, data;
+                
+                switch(filter) {
+                    case 'singapore':
+                        response = await fetch('/api/news/singapore');
+                        document.getElementById('section-title').textContent = 'Singapore News';
+                        break;
+                    case 'malaysia':
+                        response = await fetch('/api/news/malaysia');
+                        document.getElementById('section-title').textContent = 'Malaysia News';
+                        break;
+                    case 'business':
+                        response = await fetch('/api/news/business');
+                        document.getElementById('section-title').textContent = 'Business News';
+                        break;
+                    case 'technology':
+                        response = await fetch('/api/news/technology');
+                        document.getElementById('section-title').textContent = 'Technology News';
+                        break;
+                    case 'sports':
+                        response = await fetch('/api/news/sports');
+                        document.getElementById('section-title').textContent = 'Sports News';
+                        break;
+                    case 'entertainment':
+                        response = await fetch('/api/news/entertainment');
+                        document.getElementById('section-title').textContent = 'Entertainment News';
+                        break;
+                    case 'health':
+                        response = await fetch('/api/news/health');
+                        document.getElementById('section-title').textContent = 'Health News';
+                        break;
+                    case 'science':
+                        response = await fetch('/api/news/science');
+                        document.getElementById('section-title').textContent = 'Science News';
+                        break;
+                    default:
+                        response = await fetch('/api/news');
+                        document.getElementById('section-title').textContent = 'Latest News';
+                }
+                
+                data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                } else {
+                    showError(`Failed to load ${filter} news`);
+                }
+            } catch (error) {
+                console.error(`Error fetching ${filter} news:`, error);
+                showError(`Error loading ${filter} news. Please try again later.`);
+            }
+        }
+
+        // Search news
+        async function searchNews(query) {
+            try {
+                showLoading();
+                const response = await fetch(`/api/news/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayNews(data.data);
+                    document.getElementById('section-title').textContent = `Search Results for "${query}"`;
+                } else {
+                    showError('Failed to search news');
+                }
+            } catch (error) {
+                console.error('Error searching news:', error);
+                showError('Error searching news. Please try again later.');
+            }
+        }
+
+        // Chat functionality
+        let socket;
+        let username = '';
+        
+        // Initialize Socket.IO with error handling
+        function initSocket() {
+            try {
+                socket = io({
+                    reconnection: true,
+                    reconnectionAttempts: 5,
+                    reconnectionDelay: 1000,
+                    timeout: 20000
+                });
+                
+                socket.on('connect', function() {
+                    console.log('Connected to chat server');
+                    updateChatStatus('Connected', 'online');
+                    displayChatMessage({ message: 'Connected to chat server!' });
+                });
+                
+                socket.on('connect_error', function(error) {
+                    console.error('Connection error:', error);
+                    updateChatStatus('Connection error', 'offline');
+                    displayChatMessage({ message: 'Connection error. Retrying...' });
+                });
+                
+                socket.on('disconnect', function(reason) {
+                    console.log('Disconnected from chat server:', reason);
+                    updateChatStatus('Disconnected', 'offline');
+                    displayChatMessage({ message: 'Disconnected from chat. Reconnecting...' });
+                });
+                
+                socket.on('reconnect', function(attemptNumber) {
+                    console.log('Reconnected to chat server. Attempt:', attemptNumber);
+                    updateChatStatus('Reconnected', 'online');
+                    displayChatMessage({ message: 'Reconnected to chat!' });
+                });
+                
+                socket.on('reconnect_failed', function() {
+                    console.error('Failed to reconnect to chat server');
+                    updateChatStatus('Reconnection failed', 'offline');
+                    displayChatMessage({ message: 'Failed to reconnect to chat server. Please refresh the page.' });
+                });
+            } catch (error) {
+                console.error('Error initializing socket:', error);
+                updateChatStatus('Initialization error', 'offline');
+                displayChatMessage({ message: 'Failed to initialize chat. Please refresh the page.' });
+            }
+        }
+
+        // Initialize chat
+        function initChat() {
+            // Initialize socket connection
+            initSocket();
+            
+            const usernameInput = document.getElementById('username-input');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatToggle = document.getElementById('chat-toggle');
+
+            // Handle username input
+            usernameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    username = this.value.trim();
+                    this.disabled = true;
+                    chatInput.disabled = false;
+                    sendButton.disabled = false;
+                    if (socket) {
+                        socket.emit('join', username);
+                    }
+                }
+            });
+
+            // Handle sending messages
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && chatInput.value.trim()) {
+                    sendMessage();
+                }
+            });
+
+            // Toggle chat panel
+            chatToggle.addEventListener('click', function() {
+                const chatPanel = document.getElementById('chat-panel');
+                chatPanel.classList.toggle('collapsed');
+            });
+            
+            // Attach Socket.IO event listeners after socket is initialized
+            if (socket) {
+                socket.on('message', function(data) {
+                    displayChatMessage(data);
+                });
+                
+                socket.on('userJoined', function(message) {
+                    displayChatMessage({ message: message });
+                });
+                
+                socket.on('userLeft', function(message) {
+                    displayChatMessage({ message: message });
+                });
+            }
+            
+            // Floating chat button for mobile
+            const floatingChatButton = document.getElementById('floating-chat-button');
+            if (floatingChatButton) {
+                floatingChatButton.addEventListener('click', function() {
+                    console.log('Floating chat button clicked');
+                    const chatPanel = document.getElementById('chat-panel');
+                    if (chatPanel) {
+                        console.log('Chat panel found');
+                        // Show the chat panel
+                        chatPanel.style.display = 'flex';
+                        
+                        // Scroll to chat panel
+                        chatPanel.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Focus on username input if not set
+                        const usernameInput = document.getElementById('username-input');
+                        if (usernameInput && !usernameInput.disabled) {
+                            console.log('Focusing on username input');
+                            setTimeout(() => {
+                                usernameInput.focus();
+                            }, 500);
+                        }
+                    } else {
+                        console.log('Chat panel not found');
+                    }
+                });
+            } else {
+                console.log('Floating chat button not found');
+            }
+        }
+
+        // Update chat status indicator
+        function updateChatStatus(status, state) {
+            const statusElement = document.getElementById('chat-status');
+            const toggleElement = document.getElementById('chat-toggle');
+            
+            if (statusElement) {
+                statusElement.textContent = status;
+            }
+            
+            if (toggleElement) {
+                toggleElement.classList.remove('online', 'offline');
+                if (state) {
+                    toggleElement.classList.add(state);
+                }
+            }
+        }
+
+        // Send message function
+        function sendMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const message = chatInput.value.trim();
+            
+            if (message && username) {
+                if (socket) {
+                    try {
+                        socket.emit('message', { message: message });
+                        chatInput.value = '';
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                        displayChatMessage({ message: 'Failed to send message. Please try again.' });
+                    }
+                } else {
+                    console.error('Socket not initialized');
+                    displayChatMessage({ message: 'Chat not connected. Please refresh the page.' });
+                }
+            }
+        }
+
+        // Display chat message
+        function displayChatMessage(data) {
+            try {
+                const chatMessages = document.getElementById('chat-messages');
+                if (!chatMessages) {
+                    console.error('Chat messages container not found');
+                    return;
+                }
+                
+                const messageDiv = document.createElement('div');
+                
+                if (data.username) {
+                    // Regular message
+                    messageDiv.className = 'chat-message';
+                    messageDiv.innerHTML = `
+                        <div>
+                            <span class="username">${data.username || 'Anonymous'}</span>
+                            <span class="timestamp">${data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : new Date().toLocaleTimeString()}</span>
+                        </div>
+                        <div class="text">${data.message || 'Empty message'}</div>
+                    `;
+                } else {
+                    // System message
+                    messageDiv.className = 'chat-message system';
+                    messageDiv.innerHTML = `
+                        <div>${data.message || 'System message'}</div>
+                    `;
+                }
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (error) {
+                console.error('Error displaying chat message:', error);
+            }
+        }
+
+        // Initialize the application
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('QWEN-NEWS application loaded');
+                updateCurrentDate();
+                fetchAllNews();
+                initChat();
+                
+                // Set initial chat status
+                updateChatStatus('Connecting...', 'offline');
+                
+                // Add event listeners to navigation links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const filter = this.getAttribute('data-filter');
+                        setActiveNav(filter);
+                        
+                        if (filter === 'all') {
+                            fetchAllNews();
+                        } else {
+                            fetchFilteredNews(filter);
+                        }
+                    });
+                });
+                
+                // Add event listeners to footer category links
+                document.querySelectorAll('.footer-column ul li a[data-filter]').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const filter = this.getAttribute('data-filter');
+                        
+                        // Update navigation
+                        setActiveNav(filter);
+                        
+                        // Update main content
+                        if (filter === 'all') {
+                            fetchAllNews();
+                        } else {
+                            fetchFilteredNews(filter);
+                        }
+                    });
+                });
+                
+                // Add event listener to search button
+                document.getElementById('search-button').addEventListener('click', function() {
+                    const query = document.getElementById('search-input').value.trim();
+                    if (query) {
+                        searchNews(query);
+                    }
+                });
+                
+                // Add event listener to search input for Enter key
+                document.getElementById('search-input').addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const query = this.value.trim();
+                        if (query) {
+                            searchNews(query);
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
 
         // Show loading state
         function showLoading() {

@@ -1,9 +1,9 @@
 {
   "startTime": 1756127233930,
-  "totalRequests": 14,
-  "totalScrapedArticles": 222,
-  "averageResponseTime": 86671,
-  "errors": 14,
-  "lastUpdated": "2025-08-25T13:44:07.041Z",
-  "uptimeHours": 0.6147530555555556
+  "totalRequests": 20,
+  "totalScrapedArticles": 322,
+  "averageResponseTime": 126415,
+  "errors": 21,
+  "lastUpdated": "2025-08-25T13:53:44.898Z",
+  "uptimeHours": 0.7752688888888889
 }

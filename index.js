@@ -17,6 +17,10 @@ const {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Create HTTP server and Socket.IO instance
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
@@ -611,12 +615,118 @@ app.get('/api/stats', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+// Store connected users for chat
+const connectedUsers = new Map();
+
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+  
+  // Handle user joining chat
+  socket.on('join-chat', (userData) => {
+    const user = {
+      id: socket.id,
+      name: userData.name || 'Anonymous',
+      joinTime: new Date()
+    };
+    
+    connectedUsers.set(socket.id, user);
+    console.log('User joined chat:', user.name);
+    
+    // Broadcast to all users that someone joined
+    io.emit('user-joined', {
+      message: `${user.name} joined the chat`,
+      user: user.name,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Send current user list to everyone
+    io.emit('update-users', Array.from(connectedUsers.values()).map(u => u.name));
+  });
+  
+  // Handle incoming messages
+  socket.on('send-message', (messageData) => {
+    const user = connectedUsers.get(socket.id);
+    if (user) {
+      const message = {
+        user: user.name,
+        text: messageData.text,
+        timestamp: new Date().toISOString()
+      };
+      
+      console.log('Message received:', message);
+      
+      // Broadcast message to all connected clients
+      io.emit('receive-message', message);
+    }
+  });
+  
+  // Handle user disconnecting
+  socket.on('disconnect', () => {
+    const user = connectedUsers.get(socket.id);
+    if (user) {
+      console.log('User disconnected:', user.name);
+      connectedUsers.delete(socket.id);
+      
+      // Broadcast to all users that someone left
+      io.emit('user-left', {
+        message: `${user.name} left the chat`,
+        user: user.name,
+        timestamp: new Date().toISOString()
+      });
+      
+      // Send updated user list to everyone
+      io.emit('update-users', Array.from(connectedUsers.values()).map(u => u.name));
+    }
+  });
+});
+
+// Store connected users
+const users = new Map();
+
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+  
+  // Handle user joining chat
+  socket.on('join', (username) => {
+    users.set(socket.id, username);
+    io.emit('userJoined', `${username} joined the chat`);
+    io.emit('onlineUsers', Array.from(users.values()));
+    console.log(`${username} joined the chat`);
+  });
+  
+  // Handle incoming messages
+  socket.on('message', (data) => {
+    const username = users.get(socket.id) || 'Anonymous';
+    const messageData = {
+      username: username,
+      message: data.message,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Broadcast message to all connected clients
+    io.emit('message', messageData);
+    console.log('Message sent:', messageData);
+  });
+  
+  // Handle user disconnecting
+  socket.on('disconnect', () => {
+    const username = users.get(socket.id) || 'Anonymous';
+    users.delete(socket.id);
+    io.emit('userLeft', `${username} left the chat`);
+    io.emit('onlineUsers', Array.from(users.values()));
+    console.log(`${username} left the chat`);
+  });
+});
+
+server.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📊 Health check endpoint: http://localhost:${PORT}/api/health`);
   console.log(`📈 Stats endpoint: http://localhost:${PORT}/api/stats`);
   console.log(`📰 News API endpoint: http://localhost:${PORT}/api/news`);
   console.log(`🔍 Search API endpoint: http://localhost:${PORT}/api/news/search?q=keyword`);
+  console.log(`💬 Chat endpoint: ws://localhost:${PORT}`);
   
   // Initialize stats file
   const statsFile = path.join(__dirname, 'project-stats.json');

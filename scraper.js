@@ -2,6 +2,11 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const path = require('path');
+const puppeteer = require('puppeteer');
+
+// In-memory cache for news articles
+const newsCache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
 
 // Enhanced news sources with better selectors and more sources including Chinese newspapers
 const NEWS_SOURCES = {
@@ -165,8 +170,21 @@ const NEWS_SOURCES = {
   ],
   business: [
     {
+      name: 'Bloomberg',
+      url: 'https://www.bloomberg.com',
+      requiresJS: true,
+      selectors: {
+        container: 'article, .card, .story',
+        title: 'h1 a, h2 a, h3 a, .story-title',
+        link: 'h1 a, h2 a, h3 a, .story-title a',
+        image: 'img, .story-image',
+        date: '.date, time, .timestamp'
+      }
+    },
+    {
       name: 'CNBC',
       url: 'https://www.cnbc.com',
+      requiresJS: true,
       selectors: {
         container: 'article, .Card, .story, .Layout layout',
         title: 'h2 a, h3 a, .Card-title, .headline',
@@ -178,6 +196,7 @@ const NEWS_SOURCES = {
     {
       name: 'MarketWatch',
       url: 'https://www.marketwatch.com',
+      requiresJS: true,
       selectors: {
         container: 'article, .content-item, .card',
         title: 'h3 a, .content-item__title, .headline',
@@ -189,6 +208,7 @@ const NEWS_SOURCES = {
     {
       name: 'Yahoo Finance',
       url: 'https://finance.yahoo.com',
+      requiresJS: true,
       selectors: {
         container: 'article, .js-content-viewer div, .Cf',
         title: 'h3 a, .js-content-viewer h3, .Cf h3',
@@ -200,6 +220,7 @@ const NEWS_SOURCES = {
     {
       name: 'Investing.com',
       url: 'https://www.investing.com',
+      requiresJS: true,
       selectors: {
         container: 'article, .largeTitle, .textDiv',
         title: 'h2 a, .largeTitle h2, .textDiv h2',
@@ -380,6 +401,25 @@ function updateStats(stats) {
   }
 }
 
+// Function to get cached news data
+function getCachedNews(category) {
+  const cached = newsCache.get(category);
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    console.log(`Returning cached data for ${category}`);
+    return cached.data;
+  }
+  return null;
+}
+
+// Function to set cached news data
+function setCachedNews(category, data) {
+  newsCache.set(category, {
+    data: data,
+    timestamp: Date.now()
+  });
+  console.log(`Cached data for ${category}`);
+}
+
 // Function to extract and parse date from element
 function extractDate($, element, source) {
   try {
@@ -496,19 +536,40 @@ function parseDate(dateString) {
 // Function to scrape news from a source with enhanced logic
 async function scrapeNewsSource(source, category = 'general') {
   try {
-    const response = await axios.get(source.url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Accept-Encoding': 'gzip, deflate',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-      },
-      timeout: 15000 // 15 second timeout
-    });
+    // Check if this source requires JavaScript rendering
+    const requiresJS = source.requiresJS || false;
     
-    const $ = cheerio.load(response.data);
+    let $, htmlContent;
+    
+    if (requiresJS) {
+      // Use Puppeteer for JavaScript-heavy sites
+      console.log(`Using Puppeteer for ${source.name}`);
+      const browser = await puppeteer.launch({ 
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      const page = await browser.newPage();
+      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36');
+      await page.goto(source.url, { waitUntil: 'networkidle2', timeout: 30000 });
+      htmlContent = await page.content();
+      await browser.close();
+      $ = cheerio.load(htmlContent);
+    } else {
+      // Use axios for regular sites
+      const response = await axios.get(source.url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+          'Accept-Encoding': 'gzip, deflate',
+          'Connection': 'keep-alive',
+          'Upgrade-Insecure-Requests': '1',
+        },
+        timeout: 15000 // 15 second timeout
+      });
+      $ = cheerio.load(response.data);
+    }
+    
     const articles = [];
     
     // Try multiple container selectors
@@ -529,7 +590,7 @@ async function scrapeNewsSource(source, category = 'general') {
       console.log(`Found ${containers.length} containers with broad selectors`);
     }
     
-    console.log(`Processing ${containers.length} containers for ${source.name}`);
+    console.log(`Total containers for ${source.name}: ${containers.length}`);
     
     containers.forEach((element, index) => {
       if (index >= 25) return; // Increase limit to 25 articles per source
@@ -670,11 +731,17 @@ function getDefaultImage(category) {
 
 // Function to get all news from all sources
 async function getAllNews() {
+  // Check cache first
+  const cached = getCachedNews('all');
+  if (cached) {
+    return cached;
+  }
+  
   const startTime = Date.now();
   const allNews = [];
   
   // Scrape all categories
-  const categories = ['singapore', 'malaysia', 'business', 'technology', 'sports'];
+  const categories = ['singapore', 'malaysia', 'business', 'technology', 'sports', 'entertainment', 'health', 'science'];
   
   for (const category of categories) {
     if (NEWS_SOURCES[category]) {
@@ -697,11 +764,20 @@ async function getAllNews() {
     averageResponseTime: responseTime
   });
   
+  // Cache the results
+  setCachedNews('all', allNews);
+  
   return allNews;
 }
 
 // Function to get Singapore news only
 async function getSingaporeNews() {
+  // Check cache first
+  const cached = getCachedNews('singapore');
+  if (cached) {
+    return cached;
+  }
+  
   const startTime = Date.now();
   const singaporeNews = [];
   
@@ -723,6 +799,9 @@ async function getSingaporeNews() {
     totalScrapedArticles: singaporeNews.length,
     averageResponseTime: responseTime
   });
+  
+  // Cache the results
+  setCachedNews('singapore', singaporeNews);
   
   return singaporeNews;
 }
